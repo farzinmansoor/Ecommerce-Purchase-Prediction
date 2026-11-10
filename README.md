@@ -1,38 +1,45 @@
-# 🛒 E-Commerce Purchase Prediction System
+# E-Commerce Purchase Prediction System
 
-A Machine Learning project that predicts whether an online shopping session is likely to result in a purchase based on customer browsing behaviour.
+## 🚀 Live Demo
+
+Try the deployed application here:
+
+**[Open E-Commerce Purchase Prediction App](https://ecommerce-purchase-prediction-hh2lvreghmhfuqsnvafhm5.streamlit.app/)**
 
 ## 📌 Project Overview
 
-The E-Commerce Purchase Prediction System uses machine learning algorithms to analyse customer browsing activities and predict whether a shopping session will result in a purchase.
+The E-Commerce Purchase Prediction System is a Machine Learning project that predicts whether a website visitor is likely to make a purchase based on their browsing session activities.
 
-The system uses the Online Shoppers Purchasing Intention Dataset and compares multiple machine learning models. A Random Forest Classifier was selected as the final model and integrated into a Streamlit web application.
+The system analyzes customer session information, such as the number of pages visited, time spent on product pages, bounce rate, exit rate, and visitor type.
+
+A Random Forest Classification model is used to predict the purchase outcome. The project also includes an interactive web application developed using Streamlit.
 
 ## 🎯 Project Objectives
 
-- Analyse customer browsing behaviour.
-- Clean and prepare the dataset.
-- Perform Exploratory Data Analysis (EDA).
-- Train and compare machine learning models.
-- Predict purchase and non-purchase sessions.
-- Display predictions through an interactive web application.
+- Analyze e-commerce customer browsing behaviour.
+- Understand the factors related to purchasing decisions.
+- Clean and prepare the dataset for machine learning.
+- Train and compare different classification algorithms.
+- Predict whether a visitor session will result in a purchase.
+- Develop an interactive web application using Streamlit.
 
-## 📊 Dataset Information
+## 📊 Dataset
 
-**Dataset:** Online Shoppers Purchasing Intention Dataset
+**Dataset Name:** Online Shoppers Purchasing Intention Dataset
 
 **Source:** UCI Machine Learning Repository
 
-**Dataset link:** https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset
+[View Dataset](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset)
 
-Dataset details:
+Dataset Details:
+
 - Original records: 12,330
 - Duplicate records removed: 125
 - Cleaned records: 12,205
 - Input features: 17
 - Target variable: Revenue
 
-The target variable indicates whether a shopping session resulted in a purchase.
+The target variable `Revenue` indicates whether a shopping session resulted in a purchase.
 
 ## 🛠️ Technologies Used
 
@@ -48,18 +55,29 @@ The target variable indicates whether a shopping session resulted in a purchase.
 
 ## ⚙️ Project Workflow
 
-1. Data Collection – Downloaded the dataset from the UCI Machine Learning Repository.
-2. Data Cleaning – Checked missing values and removed duplicate records.
-3. Exploratory Data Analysis – Analysed customer browsing patterns.
-4. Data Preprocessing – Applied StandardScaler and OneHotEncoder.
-5. Model Training – Trained Logistic Regression, KNN and Random Forest models.
-6. Model Evaluation – Compared models using accuracy, precision, recall and F1-score.
-7. Model Saving – Saved the selected Random Forest pipeline using Joblib.
-8. Web Application – Developed an interactive prediction application using Streamlit.
+1. **Data Collection:** Downloaded the Online Shoppers Purchasing Intention Dataset from the UCI Machine Learning Repository.
+
+2. **Data Exploration:** Analyzed the dataset, checked data types, and explored customer purchasing behaviour.
+
+3. **Data Cleaning:** Checked for missing values and removed 125 duplicate records.
+
+4. **Feature Analysis:** Studied the relationship between customer browsing activities and purchase outcomes.
+
+5. **Data Preparation:** Separated numerical and categorical features and divided the dataset into training and testing sets.
+
+6. **Model Training:** Trained Logistic Regression, K-Nearest Neighbors (KNN), and Random Forest classification models.
+
+7. **Model Evaluation:** Compared the models using accuracy, precision, recall, F1-score, and confusion matrices.
+
+8. **Model Saving:** Saved the selected Random Forest model using Joblib.
+
+9. **Web Application:** Developed an interactive prediction application using Streamlit.
+
+10. **Deployment:** Deployed the application using Streamlit Community Cloud.
 
 ## 🤖 Machine Learning Models
 
-Three machine learning algorithms were trained and evaluated.
+Three classification algorithms were trained and evaluated.
 
 | Model | Accuracy |
 |---|---:|
@@ -67,31 +85,43 @@ Three machine learning algorithms were trained and evaluated.
 | K-Nearest Neighbors (KNN) | 87.34% |
 | Random Forest | 89.59% |
 
-**Selected Model:** Random Forest Classifier
+### Best Performing Model: Random Forest
 
-The Random Forest model achieved the highest accuracy among the three models tested.
+The Random Forest model was selected based on its overall performance.
 
-### Final Model Performance
+Evaluation results:
 
 - Accuracy: 89.59%
-- Purchase Precision: 65%
-- Purchase Recall: 72%
-- Purchase F1-score: 68%
+- Precision (Purchase): 65%
+- Recall (Purchase): 72%
+- F1-Score (Purchase): 68%
 
-The dataset contains more non-purchase sessions than purchase sessions. Therefore, precision, recall and F1-score are also considered when evaluating the model.
+The model uses class weighting to help handle the imbalance between purchase and non-purchase sessions.
 
-## 🌐 Web Application Features
+## 🌐 Streamlit Web Application
 
-The Streamlit application allows users to:
+The project includes an interactive web application where users can enter shopping session details and receive a purchase prediction.
 
-- Enter customer browsing information.
-- Select visitor and session details.
-- Choose operating system, browser, region and traffic categories.
-- Predict purchase or no-purchase outcomes.
-- View estimated purchase probability.
-- Understand input fields through help descriptions and tooltips.
+### Application Features
 
-## 📂 Project Structure
+- User-friendly interface.
+- Input fields for customer browsing activities.
+- Numerical and categorical input options.
+- Purchase prediction.
+- Purchase probability display.
+- Interactive prediction results.
+
+### Application Screenshots
+
+**1. Application Home Page**
+
+![Application Home Page](screenshots/app-home.png)
+
+**2. Prediction Result**
+
+![Prediction Result](screenshots/prediction-result.png)
+
+## 📁 Project Structure
 
 ```text
 Ecommerce-Purchase-Prediction/
@@ -104,8 +134,8 @@ Ecommerce-Purchase-Prediction/
 │   └── best_purchase_model.pkl
 │
 ├── screenshots/
-│
-├── .venv/
+│   ├── app-home.png
+│   └── prediction-result.png
 │
 ├── data_exploration.py
 ├── data_cleaning.py
@@ -119,93 +149,74 @@ Ecommerce-Purchase-Prediction/
 ├── save_best_model.py
 ├── test_saved_model.py
 ├── inspect_app_inputs.py
+│
 ├── app.py
-└── README.md
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
-## 🚀 How to Run the Project
+## 💻 How to Run the Project Locally
 
-### 1. Clone the repository
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/farzinmansoor/Ecommerce-Purchase-Prediction.git
 ```
 
-### 2. Open the project folder
+### Step 2: Navigate to the Project Folder
 
 ```bash
 cd Ecommerce-Purchase-Prediction
 ```
 
-### 3. Create a virtual environment
+### Step 3: Create a Virtual Environment
 
 ```bash
 python3 -m venv .venv
 ```
 
-### 4. Activate the virtual environment
+### Step 4: Activate the Virtual Environment
 
-For macOS:
+For macOS and Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-### 5. Install the required packages
+### Step 5: Install Required Libraries
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn streamlit joblib
+pip install -r requirements.txt
 ```
 
-### 6. Run the Streamlit application
+### Step 6: Run the Streamlit Application
 
 ```bash
 streamlit run app.py
 ```
 
-The application will open in your browser at:
+The application will open in your web browser.
 
-```text
-http://localhost:8501
-```
-
-**Note:** The dataset and saved model files must be available in their respective folders before running the application.
-
-## 📸 Application Screenshots
-
-Add your application screenshots to the `screenshots/` folder and include them here.
-
-### Application Interface
-
-![Application Interface](screenshots/app-home.png)
-
-### Prediction Result
-
-![Prediction Result](screenshots/prediction-result.png)
-
-## Application Screenshots
-
-### Application Home Page
-![Application Home Page](screenshots/app-home.png)
-
-### Purchase Prediction Result
-![Purchase Prediction Result](screenshots/prediction-result.png)
-
-## 📚 Dataset Reference
+## 📚 References
 
 Sakar, C. O., & Kastro, Y. (2018). Online Shoppers Purchasing Intention Dataset. UCI Machine Learning Repository.
 
-Dataset licence: CC BY 4.0.
+Dataset License: CC BY 4.0.
+
+[UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset)
 
 ## ⚠️ Disclaimer
 
-The predictions are machine learning estimates based on historical shopping-session data. They do not guarantee whether an individual customer will make a purchase.
+This project is developed for educational and demonstration purposes. Predictions are based on a trained machine learning model and are not guaranteed to represent actual customer purchasing decisions.
 
 ## 👨‍💻 Author
 
 **Farzin Mansoor**
 
-GitHub: https://github.com/farzinmansoor
+- GitHub: [farzinmansoor](https://github.com/farzinmansoor)
+- LinkedIn: [Farzin Mansoor](https://www.linkedin.com/in/farzin-mansoor-8045b3361/)
 
-LinkedIn: https://linkedin.com/in/farzin-mansoor-8045b3361/
+---
 
+⭐ If you find this project interesting, feel free to explore the repository and try the live application!
