@@ -183,6 +183,14 @@ Add your application screenshots to the `screenshots/` folder and include them h
 
 ![Prediction Result](screenshots/prediction-result.png)
 
+## Application Screenshots
+
+### Application Home Page
+![Application Home Page](screenshots/app-home.png)
+
+### Purchase Prediction Result
+![Purchase Prediction Result](screenshots/prediction-result.png)
+
 ## 📚 Dataset Reference
 
 Sakar, C. O., & Kastro, Y. (2018). Online Shoppers Purchasing Intention Dataset. UCI Machine Learning Repository.
@@ -200,3 +208,4 @@ The predictions are machine learning estimates based on historical shopping-sess
 GitHub: https://github.com/farzinmansoor
 
 LinkedIn: https://linkedin.com/in/farzin-mansoor-8045b3361/
+
