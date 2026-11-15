@@ -704,13 +704,18 @@ The best experimental ANN was selected using validation F1-score.
 
 This CSV file contains the experiment configurations and validation metrics.
 
-### ANN Preprocessing Note
 
-The ANN evaluation scripts reconstruct the same preprocessing steps and training split used during model training.
+### ANN Preprocessing
 
-For standalone ANN inference, the fitted preprocessing transformer should also be saved and reused alongside the Keras model.
+The fitted ANN preprocessing pipeline is saved as:
 
-The deployed Streamlit application currently uses the saved Random Forest pipeline, which already includes its preprocessing.
+`models/ann_preprocessor.pkl`
+
+It contains the numerical scaling and categorical encoding transformations fitted on the ANN training data.
+
+The final evaluation script loads this saved preprocessor alongside `models/ann_best_experiment.keras`, ensuring consistent feature transformations.
+
+The saved ANN and preprocessor were successfully verified on the held-out test set of 2,441 records, reproducing an accuracy of 89.80% and a purchase-class F1-score of 0.6603.
 
 ## 🌐 Streamlit Web Application
 
