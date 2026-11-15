@@ -1,55 +1,63 @@
-# Import Pandas,.....
+
+# =====================================
+# E-COMMERCE PURCHASE PREDICTION
+# DATA EXPLORATION AND EDA
+# =====================================
+
+import os
 import pandas as pd
+import matplotlib
+
+# Use a non-interactive backend to save charts
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the dataset
+# Create visualization folder if it does not exist
+os.makedirs("visualizations", exist_ok=True)
+
+# Load the original dataset
 df = pd.read_csv("dataset/online_shoppers_intention.csv")
 
-# Display the complete dataset information
+# =====================================
+# BASIC DATASET EXPLORATION
+# =====================================
+
 print("\n========== ORIGINAL DATASET ==========")
 print(df)
 
-# Display the first five records
 print("\n========== FIRST FIVE RECORDS ==========")
 print(df.head())
 
-# Display the number of rows and columns
 print("\n========== DATASET SHAPE ==========")
 print(df.shape)
 
-# Display column names and data types
 print("\n========== DATASET INFORMATION ==========")
 df.info()
 
-# Display statistical summary
 print("\n========== STATISTICAL SUMMARY ==========")
 print(df.describe())
 
-# Display missing values
 print("\n========== MISSING VALUES ==========")
 print(df.isnull().sum())
 
-# Check duplicate records
 print("\n========== DUPLICATE RECORDS ==========")
 print("Number of duplicates:", df.duplicated().sum())
 
-# Display purchase and no-purchase counts
 print("\n========== PURCHASE DISTRIBUTION ==========")
 print(df["Revenue"].value_counts())
 
-# Display purchase percentages
 print("\n========== PURCHASE PERCENTAGES ==========")
 print(df["Revenue"].value_counts(normalize=True) * 100)
 
-# Display column names
 print("\n========== COLUMN NAMES ==========")
 print(df.columns.tolist())
 
-print("\nDATASET EXPLORATION COMPLETED!")
+# =====================================
+# DATA TYPES AND CLEANING INSPECTION
+# =====================================
 
-# DATA CLEANING AND EDA
-# Separate numerical and categorical columns
 numerical_columns = df.select_dtypes(
     include=["int64", "float64"]
 ).columns
@@ -64,26 +72,25 @@ print(numerical_columns.tolist())
 print("\nCATEGORICAL COLUMNS")
 print(categorical_columns.tolist())
 
-# Check data types
 print("\nDATA TYPES")
 print(df.dtypes)
 
-# Check missing values
 print("\nMISSING VALUES")
 print(df.isnull().sum())
 
-#  Check duplicate records
 print("\nDUPLICATE RECORDS")
 print(df.duplicated().sum())
 
+# =====================================
+# VISUALIZATION 1
+# PURCHASE VS NO PURCHASE
+# =====================================
 
-# Purchase distribution
 purchase_counts = df["Revenue"].value_counts()
 
 print("\nPURCHASE DISTRIBUTION")
 print(purchase_counts)
 
-# Plot purchase distribution
 purchase_counts.plot(
     kind="bar",
     figsize=(7, 5)
@@ -95,9 +102,21 @@ plt.ylabel("Number of Sessions")
 plt.xticks(rotation=0)
 
 plt.tight_layout()
-plt.show()
 
-# Purchase behavior by visitor type
+plt.savefig(
+    "visualizations/purchase_distribution.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.close()
+
+print("Saved: visualizations/purchase_distribution.png")
+
+# =====================================
+# VISUALIZATION 2
+# PURCHASE BEHAVIOR BY VISITOR TYPE
+# =====================================
 
 visitor_purchase = pd.crosstab(
     df["VisitorType"],
@@ -106,8 +125,6 @@ visitor_purchase = pd.crosstab(
 
 print("\nVISITOR TYPE VS PURCHASE")
 print(visitor_purchase)
-
-# Visualize visitor purchase behavior
 
 visitor_purchase.plot(
     kind="bar",
@@ -121,10 +138,21 @@ plt.xticks(rotation=0)
 plt.legend(title="Revenue")
 
 plt.tight_layout()
-plt.show()
 
+plt.savefig(
+    "visualizations/visitor_purchase_behavior.png",
+    dpi=300,
+    bbox_inches="tight"
+)
 
-# Compare product browsing duration
+plt.close()
+
+print("Saved: visualizations/visitor_purchase_behavior.png")
+
+# =====================================
+# VISUALIZATION 3
+# PRODUCT BROWSING DURATION
+# =====================================
 
 df.boxplot(
     column="ProductRelated_Duration",
@@ -135,13 +163,24 @@ df.boxplot(
 plt.title("Product Browsing Duration by Purchase Result")
 plt.suptitle("")
 plt.xlabel("Purchase Result")
-plt.ylabel("Product Browsing Duration")
+plt.ylabel("Product Browsing Duration (seconds)")
 
 plt.tight_layout()
-plt.show()
 
+plt.savefig(
+    "visualizations/product_browsing_duration.png",
+    dpi=300,
+    bbox_inches="tight"
+)
 
-# Correlation analysis
+plt.close()
+
+print("Saved: visualizations/product_browsing_duration.png")
+
+# =====================================
+# VISUALIZATION 4
+# FEATURE CORRELATION HEATMAP
+# =====================================
 
 numerical_data = df.select_dtypes(
     include=["int64", "float64"]
@@ -151,8 +190,6 @@ correlation = numerical_data.corr()
 
 print("\nCORRELATION MATRIX")
 print(correlation)
-
-# Correlation heatmap
 
 plt.figure(figsize=(12, 8))
 
@@ -165,4 +202,18 @@ sns.heatmap(
 
 plt.title("Feature Correlation Heatmap")
 plt.tight_layout()
-plt.show()
+
+plt.savefig(
+    "visualizations/feature_correlation_heatmap.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.close()
+
+print("Saved: visualizations/feature_correlation_heatmap.png")
+
+print("\n=====================================")
+print("DATA EXPLORATION AND EDA COMPLETED!")
+print("ALL FOUR VISUALIZATIONS SAVED!")
+print("=====================================")
