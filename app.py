@@ -1,25 +1,19 @@
 
-# ==========================================
-# E-COMMERCE PURCHASE PREDICTION SYSTEM
-# MACHINE LEARNING + DEEP LEARNING DASHBOARD
-# ==========================================
-
 from pathlib import Path
-
 import joblib
 import pandas as pd
+import matplotlib.pyplot as plt
 import streamlit as st
 
-
-# ==========================================
+# ============================================================
 # 1. APPLICATION CONFIGURATION
-# ==========================================
+# ============================================================
 
 st.set_page_config(
-    page_title="E-Commerce Purchase Prediction",
+    page_title="ShopSense AI | Purchase Prediction",
     page_icon="🛒",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded",
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -27,36 +21,418 @@ MODEL_PATH = BASE_DIR / "models" / "best_purchase_model.pkl"
 VISUALIZATION_DIR = BASE_DIR / "visualizations"
 EXPERIMENT_CSV = BASE_DIR / "models" / "ann_experiment_results.csv"
 
+GREEN = "#0F3D3A"
+CREAM = "#F5DABF"
+LIGHT = "#FFF9F1"
+MINT = "#E3EFE8"
+WHITE = "#FFFFFF"
 
-# ==========================================
-# 2. LOAD RANDOM FOREST MODEL
-# ==========================================
+# ============================================================
+# 2. GREEN AND CREAM THEME
+# ============================================================
+
+st.markdown(
+    """
+    <style>
+    :root {
+        --green: #0F3D3A;
+        --cream: #F5DABF;
+        --light: #FFF9F1;
+        --mint: #E3EFE8;
+    }
+
+    html, body,
+    [data-testid="stApp"],
+    [data-testid="stAppViewContainer"] {
+        background-color: #FFF9F1 !important;
+        color: #0F3D3A;
+    }
+
+    .block-container {
+        max-width: 1250px;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    h1, h2, h3, h4 {
+        color: #0F3D3A;
+    }
+
+    h1 {
+        font-weight: 800;
+        letter-spacing: -0.8px;
+    }
+
+    /* SIDEBAR */
+
+    [data-testid="stSidebar"] {
+        background-color: #0F3D3A !important;
+    }
+
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] strong {
+        color: #FFFFFF !important;
+    }
+
+    [data-testid="stSidebar"]
+    [data-testid="stCaptionContainer"] p {
+        color: #E8D9C5 !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"] label {
+        border-radius: 12px !important;
+        padding: 0.65rem 0.8rem !important;
+        margin-bottom: 0.35rem !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"] label p {
+        color: #FFFFFF !important;
+        font-weight: 650 !important;
+        opacity: 1 !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"] label:hover {
+        background-color: rgba(
+            245, 218, 191, 0.18
+        ) !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"]
+    label:has(input:checked) {
+        background-color: #F5DABF !important;
+        border-radius: 12px !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"]
+    label:has(input:checked) p {
+        color: #0F3D3A !important;
+        font-weight: 750 !important;
+    }
+
+    [data-testid="stSidebar"]
+    [role="radiogroup"]
+    label:has(input:checked) * {
+        color: #0F3D3A !important;
+    }
+
+    [data-testid="stSidebar"] hr {
+        border-color: rgba(
+            245, 218, 191, 0.25
+        ) !important;
+    }
+
+    /* METRIC CARDS */
+
+    [data-testid="stMetric"] {
+        background: #FFFFFF;
+        border: 1px solid #DCE8DF;
+        border-radius: 16px;
+        padding: 1.1rem;
+        box-shadow: 0 3px 12px
+            rgba(15, 61, 58, 0.04);
+    }
+
+    [data-testid="stMetricLabel"] * {
+        color: #54716A !important;
+    }
+
+    [data-testid="stMetricValue"] * {
+        color: #0F3D3A !important;
+    }
+
+    /* FORMS */
+
+    div[data-testid="stForm"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #DCE8DF !important;
+        border-radius: 18px !important;
+        padding: 1.4rem !important;
+    }
+
+    div[data-testid="stForm"] label p {
+        color: #0F3D3A !important;
+        font-weight: 600 !important;
+    }
+
+    /* INPUT AND DROPDOWN LABELS */
+
+    [data-testid="stMain"] label p,
+    [data-testid="stMain"]
+    [data-testid="stWidgetLabel"] p,
+    [data-testid="stMain"]
+    [data-testid="stSelectbox"] label * {
+        color: #0F3D3A !important;
+        font-weight: 650 !important;
+        opacity: 1 !important;
+    }
+
+    /* NUMBER INPUTS */
+
+    [data-testid="stMain"] [data-baseweb="input"],
+    [data-testid="stMain"] [data-baseweb="input"] input,
+    [data-testid="stMain"]
+    [data-testid="stNumberInput"]
+    [data-baseweb="input"] > div,
+    [data-testid="stMain"]
+    [data-testid="stNumberInput"]
+    [data-baseweb="input"] > div > div {
+        background-color: #FFFFFF !important;
+        color: #0F3D3A !important;
+    }
+
+    [data-testid="stMain"]
+    [data-baseweb="input"] {
+        border: 1px solid #B8CEC2 !important;
+        border-radius: 9px !important;
+    }
+
+    [data-testid="stMain"]
+    [data-baseweb="input"] input {
+        color: #0F3D3A !important;
+        -webkit-text-fill-color: #0F3D3A !important;
+    }
+
+    /* NUMBER INPUT BUTTONS */
+
+    [data-testid="stMain"]
+    [data-testid="stNumberInput"] button {
+        background-color: #E3EFE8 !important;
+        color: #0F3D3A !important;
+    }
+
+    [data-testid="stMain"]
+    [data-testid="stNumberInput"] button * {
+        color: #0F3D3A !important;
+        stroke: #0F3D3A !important;
+    }
+
+    /* SELECTBOXES */
+
+    [data-testid="stMain"]
+    [data-baseweb="select"] > div,
+    [data-testid="stMain"]
+    [data-baseweb="select"] > div > div {
+        background-color: #FFFFFF !important;
+        color: #0F3D3A !important;
+    }
+
+    [data-testid="stMain"]
+    [data-baseweb="select"] > div {
+        border: 1px solid #B8CEC2 !important;
+        border-radius: 9px !important;
+    }
+
+    [data-testid="stMain"]
+    [data-baseweb="select"] span,
+    [data-testid="stMain"]
+    [data-baseweb="select"] svg {
+        color: #0F3D3A !important;
+        fill: #0F3D3A !important;
+    }
+
+    /* PREDICTION BUTTON */
+
+    div.stFormSubmitButton > button,
+    div.stButton > button[kind="primary"] {
+        background-color: #F5DABF !important;
+        color: #0F3D3A !important;
+        border: 2px solid #0F3D3A !important;
+        border-radius: 12px !important;
+        font-weight: 750 !important;
+        min-height: 50px !important;
+        opacity: 1 !important;
+    }
+
+    div.stFormSubmitButton > button *,
+    div.stButton > button[kind="primary"] * {
+        color: #0F3D3A !important;
+        fill: #0F3D3A !important;
+        opacity: 1 !important;
+    }
+
+    div.stFormSubmitButton > button:hover,
+    div.stButton > button[kind="primary"]:hover {
+        background-color: #EAC9A5 !important;
+        color: #0F3D3A !important;
+        border-color: #0F3D3A !important;
+    }
+
+    /* TABLES */
+
+    .shopsense-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #DCE8DF;
+        border-radius: 12px;
+        margin: 0.5rem 0 1.2rem;
+    }
+
+    .shopsense-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    .shopsense-table thead th {
+        background-color: #0F3D3A;
+        color: #FFFFFF;
+        padding: 13px 14px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .shopsense-table tbody td {
+        background-color: #FFFFFF;
+        color: #0F3D3A;
+        padding: 12px 14px;
+        border-bottom: 1px solid #DCE8DF;
+    }
+
+    .shopsense-table tbody tr:hover td {
+        background-color: #E3EFE8;
+    }
+
+    .shopsense-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    [data-testid="stDataFrame"] {
+        border: 1px solid #DCE8DF;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* EXPANDERS */
+
+    div[data-testid="stExpander"] {
+        background-color: #FFFFFF;
+        border: 1px solid #DCE8DF;
+        border-radius: 12px;
+    }
+
+    /* IMAGES AND ALERTS */
+
+    [data-testid="stImage"] img {
+        border-radius: 12px;
+    }
+
+    [data-testid="stAlert"] {
+        border-radius: 12px;
+    }
+
+    hr {
+        border-color: #DCE8DF;
+    }
+
+    /* OVERVIEW HERO */
+
+    .hero {
+        background: #0F3D3A;
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        color: #FFF9F1 !important;
+        margin: 0 0 0.8rem;
+        font-size: clamp(1.8rem, 4vw, 2.7rem);
+    }
+
+    .hero p {
+        color: #F5DABF !important;
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    /* SECTION HEADINGS */
+
+    .section-heading {
+        background: #E3EFE8;
+        color: #0F3D3A;
+        border-left: 5px solid #0F3D3A;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        margin: 1.5rem 0 1rem;
+        font-weight: 750;
+        font-size: 1.15rem;
+    }
+
+    /* OVERVIEW CARDS */
+
+    .soft-card {
+        background: #FFFFFF;
+        border: 1px solid #DCE8DF;
+        border-radius: 15px;
+        padding: 1.3rem;
+        margin: 0.6rem 0;
+        min-height: 145px;
+    }
+
+    .soft-card h3 {
+        color: #0F3D3A !important;
+        margin-top: 0;
+        font-size: 1.15rem;
+    }
+
+    .soft-card p {
+        color: #48645E !important;
+        margin-bottom: 0;
+    }
+
+    .footer {
+        color: #54716A;
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero {
+            padding: 1.4rem;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ============================================================
+# 3. HELPER FUNCTIONS
+# ============================================================
 
 @st.cache_resource
 def load_model():
     return joblib.load(MODEL_PATH)
 
 
-# ==========================================
-# 3. HELPER FUNCTIONS
-# ==========================================
-
-def show_image(filename, caption=None):
-    image_path = VISUALIZATION_DIR / filename
-
-    if image_path.exists():
-        st.image(
-            str(image_path),
-            caption=caption,
-            use_container_width=True
-        )
-    else:
-        st.info(
-            f"Visualization not found: {filename}"
-        )
+def section(title):
+    st.markdown(
+        f'<div class="section-heading">{title}</div>',
+        unsafe_allow_html=True,
+    )
 
 
-def show_metric_cards(metrics):
+def page_header(title, description):
+    st.title(title)
+    st.write(description)
+    st.divider()
+
+
+def show_metrics(metrics):
     columns = st.columns(len(metrics))
 
     for column, (label, value) in zip(columns, metrics):
@@ -64,110 +440,364 @@ def show_metric_cards(metrics):
             st.metric(label, value)
 
 
-# ==========================================
-# 4. HEADER
-# ==========================================
+def show_image(filename, caption=None):
+    path = VISUALIZATION_DIR / filename
 
-st.title("🛒 E-Commerce Purchase Prediction System")
-
-st.write(
-    "An interactive Machine Learning and Deep Learning "
-    "project for analyzing online shopping behaviour "
-    "and predicting customer purchases."
-)
-
-st.caption(
-    "Dataset: UCI Online Shoppers Purchasing Intention | "
-    "12,205 cleaned sessions | 17 input features"
-)
-
-st.divider()
+    if path.exists():
+        st.image(
+            str(path),
+            caption=caption,
+            use_container_width=True,
+        )
+    else:
+        st.info(f"Visualization not found: {filename}")
 
 
-# ==========================================
-# 5. MAIN NAVIGATION
-# ==========================================
+def styled_table(data, height=None):
+    """
+    Full-width green-and-cream table
+    with clean numeric formatting.
+    """
 
-tab_prediction, tab_eda, tab_models, tab_ann = st.tabs([
-    "🛒 Purchase Prediction",
-    "📊 Data Analysis",
-    "🤖 Model Comparison",
-    "🧠 ANN Experiments"
-])
+    formatted_data = data.copy()
 
+    for column in formatted_data.columns:
+        if pd.api.types.is_float_dtype(
+            formatted_data[column]
+        ):
+            if "Accuracy (%)" in column:
+                formatted_data[column] = (
+                    formatted_data[column].map(
+                        lambda value: f"{value:.2f}"
+                    )
+                )
+            else:
+                formatted_data[column] = (
+                    formatted_data[column].map(
+                        lambda value: f"{value:.4f}"
+                    )
+                )
 
-# ==========================================
-# TAB 1: PURCHASE PREDICTION
-# ==========================================
-
-with tab_prediction:
-
-    st.header("Customer Purchase Prediction")
-
-    st.write(
-        "Enter customer browsing information to predict "
-        "whether the shopping session is likely to "
-        "result in a purchase."
+    table_html = formatted_data.to_html(
+        index=False,
+        escape=True,
+        classes="shopsense-table",
+        border=0,
     )
 
-    st.info(
-        "How to use: Enter the customer's actual browsing "
-        "information and click Predict Purchase. "
-        "The Random Forest model will estimate the result."
+    st.markdown(
+        '<div class="shopsense-table-wrapper">'
+        + table_html
+        + "</div>",
+        unsafe_allow_html=True,
     )
 
-    st.caption(
-        "Prediction model: Random Forest | "
-        "Test accuracy: 89.59% | "
-        "Purchase-class F1-score: approximately 0.68"
+
+def comparison_chart(data, metric):
+    """
+    Horizontal comparison chart
+    with full model names.
+    """
+
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+
+    fig.patch.set_facecolor(WHITE)
+    ax.set_facecolor(WHITE)
+
+    labels = data["Model"].tolist()
+    values = data[metric].tolist()
+
+    colors = [
+        GREEN if "Random Forest" in label
+        else "#4E8576" if "ANN" in label
+        else "#A6C7B9"
+        for label in labels
+    ]
+
+    bars = ax.barh(
+        labels,
+        values,
+        color=colors,
+        height=0.6,
     )
 
-    # --------------------------------------
-    # INPUT FIELD EXPLANATIONS
-    # --------------------------------------
+    ax.invert_yaxis()
 
-    with st.expander(
-        "📖 Understand the input fields before starting"
-    ):
+    for spine in ["top", "right", "left"]:
+        ax.spines[spine].set_visible(False)
 
-        st.markdown("""
-        **Page Information**
-        - Administrative: Number of account-related pages visited.
-        - Informational: Number of help or information pages visited.
-        - Product Related: Number of product pages visited.
-        - Duration fields: Total time spent on those pages, in seconds.
+    ax.spines["bottom"].set_color("#DCE8DF")
 
-        **Session Information**
-        - Bounce Rate: Dataset metric describing how frequently pages are associated with single-page sessions.
-        - Exit Rate: Dataset metric describing how frequently pages are the final page in a session.
-        - Page Values: Dataset metric related to the contribution of pages to purchase goals. It is not the product price.
-        - Special Day: Dataset measure of closeness to a special day.
+    ax.tick_params(
+        axis="y",
+        length=0,
+        labelsize=10,
+        colors=GREEN,
+        pad=10,
+    )
 
-        **Category Information**
-        - Region, Operating System, Browser and Traffic Type use numerical category codes from the original dataset.
-        - Their exact real-world names are not provided.
-        - Do not change the codes or guess their meanings.
-        """)
+    ax.tick_params(
+        axis="x",
+        colors="#54716A",
+    )
+
+    ax.grid(
+        axis="x",
+        alpha=0.18,
+        color=GREEN,
+    )
+
+    ax.set_axisbelow(True)
+
+    max_value = max(values)
+
+    if metric == "Accuracy (%)":
+        ax.set_xlim(0, 105)
+        value_format = "{:.2f}%"
+    else:
+        ax.set_xlim(0, max(1.0, max_value * 1.15))
+        value_format = "{:.3f}"
+
+    for bar, value in zip(bars, values):
+        ax.text(
+            value + (
+                1.0 if metric == "Accuracy (%)"
+                else 0.015
+            ),
+            bar.get_y() + bar.get_height() / 2,
+            value_format.format(value),
+            va="center",
+            ha="left",
+            fontsize=10,
+            color=GREEN,
+            fontweight="bold",
+        )
+
+    ax.set_xlabel(
+        metric,
+        color=GREEN,
+        fontweight="bold",
+    )
+
+    fig.subplots_adjust(
+        left=0.32,
+        right=0.95,
+        top=0.96,
+        bottom=0.13,
+    )
+
+    st.pyplot(fig, use_container_width=True)
+    plt.close(fig)
+
+
+# ============================================================
+# 4. SIDEBAR NAVIGATION
+# ============================================================
+
+with st.sidebar:
+
+    st.markdown("## 🛒 ShopSense AI")
+
+    st.caption("Purchase Prediction Dashboard")
 
     st.divider()
 
-    # --------------------------------------
-    # CUSTOMER INPUT FORM
-    # --------------------------------------
+    page = st.radio(
+        "Navigation",
+        [
+            "🏠 Overview",
+            "🛒 Purchase Prediction",
+            "📊 Data Analysis",
+            "🤖 Model Comparison",
+            "🧠 ANN Experiments",
+        ],
+        label_visibility="collapsed",
+    )
+
+    st.divider()
+
+    st.markdown("**Project information**")
+
+    st.caption("Dataset: UCI Online Shoppers")
+    st.caption("12,205 cleaned sessions")
+    st.caption("17 original input features")
+    st.caption("Random Forest + ANN")
+
+    st.divider()
+
+    st.caption("Machine Learning & Deep Learning")
+
+
+# ============================================================
+# 5. OVERVIEW PAGE
+# ============================================================
+
+if page == "🏠 Overview":
+
+    st.markdown(
+        """
+        <div class="hero">
+            <h1>🛒 E-Commerce Purchase Prediction</h1>
+            <p>
+                Explore shopping behaviour, compare machine
+                learning models, and estimate the likelihood
+                of a customer completing a purchase.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    show_metrics([
+        ("Original Sessions", "12,330"),
+        ("Cleaned Sessions", "12,205"),
+        ("Input Features", "17"),
+        ("Best Test Accuracy", "89.80%"),
+    ])
+
+    section("Explore the dashboard")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.markdown(
+            """
+            <div class="soft-card">
+                <h3>🛒 Purchase Prediction</h3>
+                <p>
+                    Enter browsing information and receive
+                    a purchase prediction from the deployed
+                    Random Forest model.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+            <div class="soft-card">
+                <h3>🤖 Model Comparison</h3>
+                <p>
+                    Compare accuracy, precision, recall,
+                    F1-score, hyperparameter tuning,
+                    and overfitting.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with col2:
+
+        st.markdown(
+            """
+            <div class="soft-card">
+                <h3>📊 Data Analysis</h3>
+                <p>
+                    Explore purchase patterns, visitor
+                    behaviour, product browsing duration,
+                    and feature correlations.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+            <div class="soft-card">
+                <h3>🧠 ANN Experiments</h3>
+                <p>
+                    Review neural network architecture,
+                    training curves, hyperparameter
+                    experiments, and test performance.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    section("Project highlights")
+
+    st.markdown(
+        """
+        - **Prediction model:** Random Forest
+        - **Random Forest test accuracy:** 89.59%
+        - **Best experimental ANN accuracy:** 89.80%
+        - **Model selection:** Random Forest retained
+          because of stronger purchase-class recall
+          and F1-score.
+        - **Evaluation:** Separate training, validation,
+          and held-out testing where appropriate.
+        """
+    )
+
+    st.info(
+        "Use the navigation menu on the left "
+        "to explore each part of the project."
+    )
+
+
+# ============================================================
+# 6. PURCHASE PREDICTION PAGE
+# ============================================================
+
+elif page == "🛒 Purchase Prediction":
+
+    page_header(
+        "🛒 Customer Purchase Prediction",
+        "Enter browsing details to estimate whether "
+        "a shopping session will result in a purchase.",
+    )
+
+    show_metrics([
+        ("Prediction Model", "Random Forest"),
+        ("Test Accuracy", "89.59%"),
+        ("Purchase F1-score", "0.68"),
+    ])
+
+    with st.expander("📖 Understand the input fields"):
+
+        st.markdown(
+            """
+            **Page information**
+
+            - Administrative: Account-related pages visited.
+            - Informational: Help or information pages visited.
+            - Product Related: Product pages visited.
+            - Duration: Time spent on pages in seconds.
+
+            **Session information**
+
+            - Bounce Rate: Dataset bounce-rate metric.
+            - Exit Rate: Dataset exit-rate metric.
+            - Page Values: Contribution of pages to purchase
+              goals, not product price.
+            - Special Day: Closeness to a special shopping day.
+
+            **Category information**
+
+            - Operating System, Browser, Region, and
+              Traffic Type are numerical dataset codes.
+            - Their exact real-world names are not
+              supplied by the dataset.
+            """
+        )
+
+    st.info(
+        "Complete the browsing details below and click "
+        "Predict Purchase to view the result."
+    )
 
     with st.form("purchase_prediction_form"):
 
-        st.subheader("Customer Browsing Information")
+        section("Step 1 — Page activity")
 
         col1, col2 = st.columns(2)
 
-        # ----------------------------------
-        # LEFT COLUMN: PAGE INFORMATION
-        # ----------------------------------
-
         with col1:
-
-            st.markdown("### 📄 Page Information")
 
             administrative = st.number_input(
                 "Administrative Pages",
@@ -175,10 +805,6 @@ with tab_prediction:
                 max_value=27,
                 value=0,
                 step=1,
-                help=(
-                    "Number of account-related pages visited, "
-                    "such as login or account pages."
-                )
             )
 
             administrative_duration = st.number_input(
@@ -187,10 +813,6 @@ with tab_prediction:
                 max_value=3398.75,
                 value=0.0,
                 step=1.0,
-                help=(
-                    "Total time spent on administrative pages, "
-                    "measured in seconds."
-                )
             )
 
             informational = st.number_input(
@@ -199,10 +821,6 @@ with tab_prediction:
                 max_value=24,
                 value=0,
                 step=1,
-                help=(
-                    "Number of information pages visited, "
-                    "such as FAQ or contact pages."
-                )
             )
 
             informational_duration = st.number_input(
@@ -211,11 +829,9 @@ with tab_prediction:
                 max_value=2549.375,
                 value=0.0,
                 step=1.0,
-                help=(
-                    "Total time spent on informational pages, "
-                    "measured in seconds."
-                )
             )
+
+        with col2:
 
             product_related = st.number_input(
                 "Product-Related Pages",
@@ -223,10 +839,6 @@ with tab_prediction:
                 max_value=705,
                 value=1,
                 step=1,
-                help=(
-                    "Number of product pages visited, "
-                    "such as shoes, shirts or mobiles."
-                )
             )
 
             product_related_duration = st.number_input(
@@ -235,10 +847,6 @@ with tab_prediction:
                 max_value=63973.52223,
                 value=60.0,
                 step=1.0,
-                help=(
-                    "Total time spent viewing product pages, "
-                    "measured in seconds."
-                )
             )
 
             page_values = st.number_input(
@@ -247,20 +855,14 @@ with tab_prediction:
                 max_value=361.7637419,
                 value=0.0,
                 step=0.1,
-                help=(
-                    "A dataset metric related to the "
-                    "contribution of pages to purchase goals. "
-                    "It is not the product price."
-                )
+                help="This is not the product price.",
             )
 
-        # ----------------------------------
-        # RIGHT COLUMN: SESSION INFORMATION
-        # ----------------------------------
+        section("Step 2 — Session behaviour")
 
-        with col2:
+        col1, col2 = st.columns(2)
 
-            st.markdown("### 📊 Session Information")
+        with col1:
 
             bounce_rates = st.number_input(
                 "Bounce Rate",
@@ -268,10 +870,6 @@ with tab_prediction:
                 max_value=0.2,
                 value=0.02,
                 step=0.01,
-                help=(
-                    "Dataset bounce-rate metric. "
-                    "Example: 0.20 represents 20%."
-                )
             )
 
             exit_rates = st.number_input(
@@ -280,11 +878,9 @@ with tab_prediction:
                 max_value=0.2,
                 value=0.03,
                 step=0.01,
-                help=(
-                    "Dataset metric describing how frequently "
-                    "a page is the final page in a session."
-                )
             )
+
+        with col2:
 
             special_day = st.number_input(
                 "Special Day",
@@ -292,108 +888,74 @@ with tab_prediction:
                 max_value=1.0,
                 value=0.0,
                 step=0.1,
-                help=(
-                    "Dataset measure of how close the session "
-                    "is to a special shopping day. Range: 0 to 1."
-                )
             )
 
             month = st.selectbox(
                 "Month",
                 [
                     "Aug", "Dec", "Feb", "Jul", "June",
-                    "Mar", "May", "Nov", "Oct", "Sep"
+                    "Mar", "May", "Nov", "Oct", "Sep",
                 ],
-                help="Month in which the shopping session occurred."
             )
+
+        section("Step 3 — Visitor information")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
 
             visitor_type = st.selectbox(
                 "Visitor Type",
                 [
                     "Returning_Visitor",
                     "New_Visitor",
-                    "Other"
+                    "Other",
                 ],
-                help=(
-                    "Select whether the visitor is new, "
-                    "returning or in another category."
-                )
             )
 
             weekend = st.selectbox(
                 "Weekend",
                 [False, True],
-                format_func=lambda value: (
-                    "Yes" if value else "No"
-                ),
-                help=(
-                    "Was the shopping session on "
-                    "Saturday or Sunday?"
-                )
+                format_func=lambda value:
+                    "Yes" if value else "No",
             )
 
             operating_system = st.selectbox(
                 "Operating System",
                 list(range(1, 9)),
-                format_func=lambda value: (
-                    f"OS Category {value}"
-                ),
-                help=(
-                    "Numerical category identifying the "
-                    "visitor's operating system. "
-                    "Exact names are not provided."
-                )
+                format_func=lambda value:
+                    f"OS Category {value}",
             )
+
+        with col2:
 
             browser = st.selectbox(
                 "Browser",
                 list(range(1, 14)),
-                format_func=lambda value: (
-                    f"Browser Category {value}"
-                ),
-                help=(
-                    "Numerical category identifying the "
-                    "visitor's browser. Exact names "
-                    "are not provided."
-                )
+                format_func=lambda value:
+                    f"Browser Category {value}",
             )
 
             region = st.selectbox(
                 "Region",
                 list(range(1, 10)),
-                format_func=lambda value: (
-                    f"Region Category {value}"
-                ),
-                help=(
-                    "Geographical category code from the "
-                    "original dataset. City and state names "
-                    "are not provided."
-                )
+                format_func=lambda value:
+                    f"Region Category {value}",
             )
 
             traffic_type = st.selectbox(
                 "Traffic Type",
                 list(range(1, 21)),
-                format_func=lambda value: (
-                    f"Traffic Category {value}"
-                ),
-                help=(
-                    "Category identifying how the visitor "
-                    "reached the website. Exact code "
-                    "descriptions are not provided."
-                )
+                format_func=lambda value:
+                    f"Traffic Category {value}",
             )
 
         st.divider()
 
         submitted = st.form_submit_button(
             "🔍 Predict Purchase",
-            use_container_width=True
+            use_container_width=True,
         )
-
-    # --------------------------------------
-    # PREDICTION RESULT
-    # --------------------------------------
 
     if submitted:
 
@@ -414,12 +976,13 @@ with tab_prediction:
             "Region": region,
             "TrafficType": traffic_type,
             "VisitorType": visitor_type,
-            "Weekend": weekend
+            "Weekend": weekend,
         }
 
         input_df = pd.DataFrame([input_data])
 
         try:
+
             model = load_model()
 
             prediction = model.predict(input_df)[0]
@@ -436,23 +999,22 @@ with tab_prediction:
                 probabilities[purchase_index]
             )
 
-            st.divider()
-            st.subheader("🎯 Prediction Result")
+            section("Step 4 — Prediction result")
 
             if prediction:
                 st.success(
-                    "The customer is likely to make "
-                    "a purchase! 🛍️"
+                    "The customer is likely "
+                    "to make a purchase! 🛍️"
                 )
             else:
                 st.warning(
-                    "The customer is unlikely to "
-                    "make a purchase."
+                    "The customer is unlikely "
+                    "to make a purchase."
                 )
 
             st.metric(
                 "Estimated Purchase Probability",
-                f"{purchase_probability * 100:.2f}%"
+                f"{purchase_probability * 100:.2f}%",
             )
 
             st.progress(purchase_probability)
@@ -464,157 +1026,120 @@ with tab_prediction:
             )
 
         except Exception as error:
+
             st.error(
-                "The prediction could not be completed. "
-                "Please check the saved model and input data."
+                "Prediction could not be completed. "
+                "Check the saved model and input data."
             )
+
             st.exception(error)
 
 
-# ==========================================
-# TAB 2: DATA ANALYSIS
-# ==========================================
+# ============================================================
+# 7. DATA ANALYSIS PAGE
+# ============================================================
 
-with tab_eda:
+elif page == "📊 Data Analysis":
 
-    st.header("📊 Exploratory Data Analysis")
-
-    st.write(
-        "Explore customer browsing patterns and "
-        "the factors associated with purchase behaviour."
+    page_header(
+        "📊 Exploratory Data Analysis",
+        "Explore customer behaviour and discover "
+        "patterns associated with online purchases.",
     )
 
-    show_metric_cards([
+    show_metrics([
         ("Original Sessions", "12,330"),
         ("Cleaned Sessions", "12,205"),
-        ("Input Features", "17")
+        ("Duplicates Removed", "125"),
+        ("Input Features", "17"),
     ])
 
-    st.divider()
+    section("Explore visualizations")
 
-    st.subheader("1. Purchase Distribution")
+    chart_options = {
+        "Purchase Distribution": (
+            "purchase_distribution.png",
+            "The dataset has substantially more "
+            "non-purchase sessions than purchase sessions.",
+        ),
+        "Visitor Purchase Behaviour": (
+            "visitor_purchase_behavior.png",
+            "Compare purchase and non-purchase counts "
+            "across visitor categories.",
+        ),
+        "Product Browsing Duration": (
+            "product_browsing_duration.png",
+            "Purchase sessions generally involve "
+            "longer product browsing durations.",
+        ),
+        "Feature Correlation Heatmap": (
+            "feature_correlation_heatmap.png",
+            "Explore correlations among numerical features.",
+        ),
+        "Visitor Purchase Percentage": (
+            "visitor_purchase_percentage.png",
+            "Compare purchase percentages rather than "
+            "raw counts across visitor categories.",
+        ),
+    }
 
-    show_image(
-        "purchase_distribution.png",
-        "Purchase and non-purchase session distribution"
+    selected_chart = st.selectbox(
+        "Choose an analysis",
+        list(chart_options.keys()),
     )
 
-    st.write(
-        "The dataset contains substantially more "
-        "non-purchase sessions than purchase sessions. "
-        "This class imbalance makes recall and F1-score "
-        "important evaluation metrics."
-    )
+    filename, explanation = chart_options[selected_chart]
 
-    st.divider()
+    st.subheader(selected_chart)
 
-    st.subheader("2. Visitor Purchase Behaviour")
+    show_image(filename, selected_chart)
 
-    show_image(
-        "visitor_purchase_behavior.png",
-        "Purchase behaviour across visitor categories"
-    )
+    st.write(explanation)
 
-    st.write(
-        "The chart compares purchase and non-purchase "
-        "session counts across different visitor types."
-    )
+    section("Key EDA findings")
 
-    st.divider()
+    col1, col2 = st.columns(2)
 
-    st.subheader("3. Product Browsing Duration")
+    with col1:
 
-    show_image(
-        "product_browsing_duration.png",
-        "Product-related browsing duration"
-    )
-
-    st.write(
-        "Purchase sessions generally involve more "
-        "time spent browsing product-related pages."
-    )
-
-    st.divider()
-
-    st.subheader("4. Feature Correlation Heatmap")
-
-    show_image(
-        "feature_correlation_heatmap.png",
-        "Correlations among numerical browsing features"
-    )
-
-    st.write(
-        "The heatmap helps identify relationships "
-        "between numerical browsing features."
-    )
-
-    st.divider()
-
-    st.subheader("5. Purchase Percentage by Visitor Type")
-
-    show_image(
-        "visitor_purchase_percentage.png",
-        "Purchase percentages by visitor category"
-    )
-
-    st.write(
-        "This chart uses percentages instead of "
-        "raw session counts, making it easier to "
-        "compare visitor categories."
-    )
-
-    st.divider()
-
-    st.subheader("Key EDA Findings")
-
-    finding1, finding2 = st.columns(2)
-
-    with finding1:
         st.metric(
             "Average PageValues — Purchase",
-            "27.26"
+            "27.26",
         )
 
         st.metric(
             "Average PageValues — No Purchase",
-            "2.00"
+            "2.00",
         )
 
-    with finding2:
+    with col2:
+
         st.metric(
             "Product Duration — Purchase",
-            "1,876.21 sec"
+            "1,876.21 sec",
         )
 
         st.metric(
             "Product Duration — No Purchase",
-            "1,082.98 sec"
+            "1,082.98 sec",
         )
 
     st.info(
-        "These findings describe associations in "
-        "the dataset. They do not prove that a "
-        "particular feature directly causes a purchase."
+        "These findings describe associations, "
+        "not proof that a feature causes a purchase."
     )
 
 
-# ==========================================
-# TAB 3: MODEL COMPARISON
-# ==========================================
+# ============================================================
+# 8. MODEL COMPARISON PAGE
+# ============================================================
 
-with tab_models:
+elif page == "🤖 Model Comparison":
 
-    st.header("🤖 Machine Learning Model Comparison")
-
-    st.write(
-        "Three traditional machine learning models "
-        "and two ANN configurations were evaluated "
-        "on the held-out test set."
-    )
-
-    st.caption(
-        "Precision, recall, and F1-score below "
-        "refer to the purchase class."
+    page_header(
+        "🤖 Machine Learning Model Comparison",
+        "Compare traditional machine learning and "
+        "deep learning performance on the test set.",
     )
 
     model_results = pd.DataFrame({
@@ -624,168 +1149,109 @@ with tab_models:
             "Random Forest (Baseline)",
             "Random Forest (Tuned)",
             "Initial ANN",
-            "Best Experimental ANN"
+            "Best Experimental ANN",
         ],
         "Accuracy (%)": [
-            88.69,
-            87.34,
-            89.59,
-            89.43,
-            89.80,
-            89.80
+            88.69, 87.34, 89.59,
+            89.43, 89.80, 89.80,
         ],
         "Precision": [
-            0.75,
-            0.66,
-            0.65,
-            0.65,
-            0.6997,
-            0.6895
+            0.75, 0.66, 0.65,
+            0.65, 0.6997, 0.6895,
         ],
         "Recall": [
-            0.41,
-            0.39,
-            0.72,
-            0.71,
-            0.6099,
-            0.6335
+            0.41, 0.39, 0.72,
+            0.71, 0.6099, 0.6335,
         ],
         "F1 Score": [
-            0.53,
-            0.49,
-            0.68,
-            0.68,
-            0.6517,
-            0.6603
-        ]
+            0.53, 0.49, 0.68,
+            0.68, 0.6517, 0.6603,
+        ],
     })
 
-    st.subheader("Performance Comparison")
+    section("Performance summary")
 
-    st.dataframe(
-        model_results,
-        use_container_width=True,
-        hide_index=True
+    show_metrics([
+        ("Highest Test Accuracy", "89.80%"),
+        ("Random Forest Recall", "72%"),
+        ("Random Forest F1", "0.68"),
+    ])
+
+    st.caption(
+        "Precision, recall, and F1-score "
+        "refer to the purchase class."
     )
 
-    # --------------------------------------
-    # IMPROVED HORIZONTAL ACCURACY CHART
-    # --------------------------------------
+    styled_table(model_results)
 
-    st.subheader("Model Accuracy")
+    section("Visual model comparison")
 
-    accuracy_chart = model_results.set_index(
-        "Model"
-    )[["Accuracy (%)"]]
-
-    st.bar_chart(
-        accuracy_chart,
-        horizontal=True,
-        sort=False,
-        x_label="Accuracy (%)",
-        y_label="Model",
-        use_container_width=True
+    metric = st.selectbox(
+        "Choose performance metric",
+        [
+            "Accuracy (%)",
+            "Precision",
+            "Recall",
+            "F1 Score",
+        ],
     )
 
-    # --------------------------------------
-    # IMPROVED HORIZONTAL F1-SCORE CHART
-    # --------------------------------------
+    comparison_chart(model_results, metric)
 
-    st.subheader("Purchase-Class F1-score")
-
-    f1_chart = model_results.set_index(
-        "Model"
-    )[["F1 Score"]]
-
-    st.bar_chart(
-        f1_chart,
-        horizontal=True,
-        sort=False,
-        x_label="F1-score",
-        y_label="Model",
-        use_container_width=True
+    st.caption(
+        "Full model names are displayed. "
+        "Higher values indicate better performance."
     )
 
-    st.divider()
-
-    st.subheader("Model Selection")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.metric(
-            "Highest Test Accuracy",
-            "89.80%",
-            help="Achieved by both evaluated ANN models."
-        )
-
-    with col2:
-        st.metric(
-            "Baseline Random Forest Recall",
-            "72%"
-        )
+    section("Model selection")
 
     st.success(
         "Random Forest was retained for deployment "
         "because it achieved stronger purchase-class "
-        "F1-score and recall than the ANN."
+        "recall and F1-score than the ANN models."
     )
 
-    st.divider()
-
-    st.subheader("Random Forest Hyperparameter Tuning")
+    section("Random Forest hyperparameter tuning")
 
     tuning_results = pd.DataFrame({
         "Metric": [
             "Accuracy",
             "Purchase Precision",
             "Purchase Recall",
-            "Purchase F1-score"
+            "Purchase F1-score",
         ],
         "Baseline": [
-            "89.59%",
-            "0.65",
-            "0.72",
-            "0.68"
+            "89.59%", "0.65", "0.72", "0.68",
         ],
         "Tuned": [
-            "89.43%",
-            "0.65",
-            "0.71",
-            "0.68"
-        ]
+            "89.43%", "0.65", "0.71", "0.68",
+        ],
     })
 
-    st.dataframe(
-        tuning_results,
-        hide_index=True,
-        use_container_width=True
-    )
+    styled_table(tuning_results)
 
-    with st.expander("View Best Hyperparameters"):
+    with st.expander("View best hyperparameters"):
 
         st.code(
             """n_estimators = 300
 max_depth = 30
 min_samples_split = 2
 min_samples_leaf = 1""",
-            language="python"
+            language="python",
         )
 
         st.write(
             "RandomizedSearchCV used 3-fold "
-            "cross-validation and achieved a "
-            "best cross-validation F1-score "
-            "of approximately 0.6794."
+            "cross-validation. Best cross-validation "
+            "F1-score: 0.6794."
         )
 
-    st.divider()
-
-    st.subheader("Random Forest Overfitting Analysis")
+    section("Overfitting analysis")
 
     show_image(
         "random_forest_overfitting_analysis.png",
-        "Training and testing performance of tuned Random Forest"
+        "Tuned Random Forest training "
+        "vs testing performance",
     )
 
     overfitting_results = pd.DataFrame({
@@ -793,60 +1259,52 @@ min_samples_leaf = 1""",
             "Accuracy",
             "Precision",
             "Recall",
-            "F1-score"
+            "F1-score",
         ],
         "Training": [
             0.9995,
             0.9967,
             1.0000,
-            0.9984
+            0.9984,
         ],
         "Testing": [
             0.8943,
             0.6483,
             0.7094,
-            0.6775
-        ]
+            0.6775,
+        ],
     })
 
-    st.dataframe(
-        overfitting_results,
-        use_container_width=True,
-        hide_index=True
-    )
+    styled_table(overfitting_results)
 
     st.warning(
-        "The tuned Random Forest shows significant "
-        "overfitting. Its training F1-score was "
-        "approximately 0.9984, compared with "
-        "0.6775 on the test set."
+        "The tuned Random Forest shows substantial "
+        "overfitting: training F1-score was "
+        "approximately 0.9984, while testing "
+        "F1-score was 0.6775."
     )
 
 
-# ==========================================
-# TAB 4: ANN EXPERIMENTS
-# ==========================================
+# ============================================================
+# 9. ANN EXPERIMENTS PAGE
+# ============================================================
 
-with tab_ann:
+elif page == "🧠 ANN Experiments":
 
-    st.header("🧠 Artificial Neural Network Experiments")
-
-    st.write(
-        "Artificial Neural Networks were trained "
-        "using TensorFlow and Keras to compare "
-        "deep learning with traditional machine learning."
+    page_header(
+        "🧠 Artificial Neural Network Experiments",
+        "Review neural network training, architecture, "
+        "experiments, and final evaluation.",
     )
 
-    show_metric_cards([
+    show_metrics([
         ("Training Records", "7,811"),
         ("Validation Records", "1,953"),
         ("Testing Records", "2,441"),
-        ("Processed Features", "74")
+        ("Processed Features", "74"),
     ])
 
-    st.divider()
-
-    st.subheader("Initial ANN Architecture")
+    section("Initial ANN architecture")
 
     architecture = pd.DataFrame({
         "Component": [
@@ -860,7 +1318,7 @@ with tab_ann:
             "Batch Size",
             "Maximum Epochs",
             "Epochs Trained",
-            "Trainable Parameters"
+            "Trainable Parameters",
         ],
         "Configuration": [
             "74",
@@ -873,118 +1331,87 @@ with tab_ann:
             "32",
             "50",
             "21",
-            "6,913"
-        ]
+            "6,913",
+        ],
     })
 
-    st.dataframe(
-        architecture,
-        use_container_width=True,
-        hide_index=True
-    )
+    styled_table(architecture)
 
-    st.divider()
-
-    st.subheader("ANN Training History")
+    section("ANN training history")
 
     col1, col2 = st.columns(2)
 
     with col1:
+
         show_image(
             "ann_training_loss.png",
-            "Training vs validation loss"
+            "Training vs validation loss",
         )
 
     with col2:
+
         show_image(
             "ann_training_accuracy.png",
-            "Training vs validation accuracy"
+            "Training vs validation accuracy",
         )
 
-    st.write(
-        "The initial ANN used early stopping "
-        "to monitor validation loss and restore "
-        "the best weights."
+    st.caption(
+        "Early stopping monitored validation loss "
+        "and restored the best weights."
     )
 
-    st.divider()
-
-    st.subheader("ANN Hyperparameter Experiments")
+    section("Hyperparameter experiments")
 
     st.write(
-        "Four ANN configurations were tested "
-        "using different numbers of layers, "
-        "neurons, batch sizes, and optimizers."
+        "Four ANN configurations were tested using "
+        "different layer sizes, batch sizes, "
+        "and optimizers."
     )
 
     if EXPERIMENT_CSV.exists():
 
-        experiments_df = pd.read_csv(
-            EXPERIMENT_CSV
-        )
-
-        st.dataframe(
-            experiments_df,
-            use_container_width=True,
-            hide_index=True
-        )
+        experiments_df = pd.read_csv(EXPERIMENT_CSV)
 
     else:
 
         experiments_df = pd.DataFrame({
             "Model": [
-                "ANN 1",
-                "ANN 2",
-                "ANN 3",
-                "ANN 4"
+                "ANN 1", "ANN 2", "ANN 3", "ANN 4",
             ],
             "Layers": [
-                "[32]",
-                "[64, 32]",
-                "[128, 64, 32]",
-                "[64, 32]"
+                "[32]", "[64, 32]",
+                "[128, 64, 32]", "[64, 32]",
             ],
             "Batch Size": [
-                32, 32, 64, 64
+                32, 32, 64, 64,
             ],
             "Optimizer": [
-                "adam",
-                "adam",
-                "adam",
-                "rmsprop"
+                "adam", "adam", "adam", "rmsprop",
             ],
             "Epochs Trained": [
-                28, 15, 13, 17
+                28, 15, 13, 17,
             ],
             "F1 Score": [
                 0.623239,
                 0.609319,
                 0.613757,
-                0.605405
-            ]
+                0.605405,
+            ],
         })
 
-        st.dataframe(
-            experiments_df,
-            use_container_width=True,
-            hide_index=True
-        )
+    styled_table(experiments_df)
 
     st.caption(
-        "The ANN experiment results above "
-        "were measured on the validation set."
+        "Experiment results were measured "
+        "on the validation set."
     )
-
-    st.subheader("Experiment Comparison")
 
     show_image(
         "ann_experiment_comparison.png",
-        "Validation F1-score across four ANN configurations"
+        "Validation F1-score comparison",
     )
 
-    st.divider()
-
-    st.subheader("Best ANN Configuration")
+    section("Best ANN configuration")
 
     st.success(
         "ANN 1 achieved the highest validation "
@@ -998,7 +1425,7 @@ with tab_ann:
             "Optimizer",
             "Batch Size",
             "Epochs Trained",
-            "Validation F1-score"
+            "Validation F1-score",
         ],
         "Value": [
             "1",
@@ -1006,47 +1433,41 @@ with tab_ann:
             "Adam",
             "32",
             "28",
-            "0.6232"
-        ]
+            "0.6232",
+        ],
     })
 
-    st.dataframe(
-        best_config,
-        use_container_width=True,
-        hide_index=True
-    )
+    styled_table(best_config)
 
-    st.divider()
+    section("Final ANN test results")
 
-    st.subheader("Final ANN Test Results")
-
-    show_metric_cards([
+    show_metrics([
         ("Accuracy", "89.80%"),
         ("Precision", "68.95%"),
         ("Recall", "63.35%"),
-        ("F1-score", "66.03%")
+        ("F1-score", "66.03%"),
     ])
 
-    st.subheader("Final ANN Confusion Matrix")
+    st.subheader("Confusion matrix")
 
     confusion_df = pd.DataFrame(
         [
             [1950, 109],
-            [140, 242]
+            [140, 242],
         ],
         index=[
             "Actual No Purchase",
-            "Actual Purchase"
+            "Actual Purchase",
         ],
         columns=[
             "Predicted No Purchase",
-            "Predicted Purchase"
-        ]
+            "Predicted Purchase",
+        ],
     )
 
     st.dataframe(
         confusion_df,
-        use_container_width=True
+        use_container_width=True,
     )
 
     st.info(
@@ -1055,35 +1476,45 @@ with tab_ann:
         "and 1,950 non-purchase sessions."
     )
 
-    st.divider()
+    section("ANN experiment findings")
 
-    st.subheader("ANN Experiment Findings")
-
-    st.markdown("""
-    - The simpler ANN with 32 neurons achieved the best validation F1-score.
-    - Adding more layers did not improve validation performance in these experiments.
-    - Adam performed better than RMSprop in the tested configurations.
-    - Early stopping helped limit unnecessary training.
-    - The final ANN achieved 89.80% test accuracy.
-    - Random Forest retained a stronger purchase-class F1-score.
-    """)
+    st.markdown(
+        """
+        - The simpler ANN with 32 neurons achieved
+          the highest validation F1-score.
+        - Adding more layers did not improve validation
+          performance in these experiments.
+        - Adam performed better than RMSprop in
+          the tested configurations.
+        - Early stopping helped limit unnecessary training.
+        - The final ANN achieved 89.80% test accuracy.
+        - Random Forest retained a stronger
+          purchase-class F1-score.
+        """
+    )
 
     st.caption(
-        "The experimental ANN was evaluated on "
-        "the held-out test set after configuration "
-        "selection using validation F1-score."
+        "The experimental ANN was evaluated on the "
+        "held-out test set after selecting its "
+        "configuration using validation F1-score."
     )
 
 
-# ==========================================
-# FOOTER
-# ==========================================
+# ============================================================
+# 10. FOOTER
+# ============================================================
 
 st.divider()
 
-st.caption(
-    "E-Commerce Purchase Prediction System | "
-    "Machine Learning & Deep Learning Project"
+st.markdown(
+    """
+    <div class="footer">
+        E-Commerce Purchase Prediction System
+        <br>
+        Machine Learning & Deep Learning Project
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 st.markdown(
