@@ -7,6 +7,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -73,20 +74,12 @@ X_train, X_val, y_train, y_val = train_test_split(
 )
 
 # ==========================================
-# RECREATE ANN PREPROCESSING
+# LOAD SAVED ANN PREPROCESSOR
 # ==========================================
 
-preprocessor = ColumnTransformer([
-    ("num", StandardScaler(), numerical_columns),
-    (
-        "cat",
-        OneHotEncoder(handle_unknown="ignore"),
-        categorical_columns
-    )
-])
-
-# Fit only on training data, as during experiments
-preprocessor.fit(X_train)
+preprocessor = joblib.load(
+    "models/ann_preprocessor.pkl"
+)
 
 X_test_processed = preprocessor.transform(X_test)
 
@@ -97,6 +90,9 @@ X_test_processed = np.asarray(
     X_test_processed,
     dtype=np.float32
 )
+
+print("Saved ANN preprocessor loaded successfully!")
+print("Processed Test Features:", X_test_processed.shape[1])
 
 # ==========================================
 # LOAD BEST EXPERIMENTAL ANN

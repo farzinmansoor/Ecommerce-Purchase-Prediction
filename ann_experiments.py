@@ -6,6 +6,7 @@
 
 import os
 import random
+import joblib
 
 import numpy as np
 import pandas as pd
@@ -91,9 +92,19 @@ preprocessor = ColumnTransformer([
         categorical_columns
     )
 ])
+# Save the fitted preprocessing pipeline
+# for consistent ANN predictions.
+os.makedirs("models", exist_ok=True)
 
+# Fitting happens on training data only.
 X_train = preprocessor.fit_transform(X_train)
 X_val = preprocessor.transform(X_val)
+joblib.dump(
+    preprocessor,
+    "models/ann_preprocessor.pkl"
+)
+
+print("ANN preprocessor saved successfully!")
 
 def to_dense(data):
     if hasattr(data, "toarray"):
