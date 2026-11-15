@@ -1,5 +1,9 @@
 
-# E-Commerce Purchase Prediction System
+# 🛒 E-Commerce Purchase Prediction System
+
+A Machine Learning and Deep Learning project that predicts whether an online shopping session will result in a purchase using customer browsing behaviour.
+
+The project compares **Logistic Regression, K-Nearest Neighbors, Random Forest, and Artificial Neural Networks (ANN)** and includes an interactive Streamlit web application.
 
 ## 🚀 Live Demo
 
@@ -9,21 +13,38 @@ Try the deployed application here:
 
 ## 📌 Project Overview
 
-The E-Commerce Purchase Prediction System is a Machine Learning project that predicts whether an e-commerce browsing session is likely to result in a purchase based on visitor activities.
+The E-Commerce Purchase Prediction System predicts whether an e-commerce browsing session is likely to result in a purchase based on visitor activities.
 
-The system analyzes customer session information, such as the number of pages visited, time spent on product pages, bounce rate, exit rate, page values, and visitor type.
+The system analyzes customer session information, including:
 
-A Random Forest Classification model is used to predict the purchase outcome. The project also includes an interactive web application developed using Streamlit.
+- Number of pages visited.
+- Time spent on product-related pages.
+- Bounce rate and exit rate.
+- Page values.
+- Visitor type.
+- Session and traffic information.
+
+Three traditional machine learning algorithms and a TensorFlow/Keras Artificial Neural Network were trained and evaluated.
+
+The **Random Forest classifier** was selected for deployment because of its strong purchase-class F1-score and recall.
+
+An interactive web application was developed using Streamlit to demonstrate purchase predictions.
 
 ## 🎯 Project Objectives
 
 - Analyze e-commerce customer browsing behaviour.
-- Understand the factors associated with purchasing decisions.
-- Clean and prepare the dataset for machine learning.
-- Train and compare different classification algorithms.
-- Evaluate model performance using suitable classification metrics.
-- Predict whether a visitor session will result in a purchase.
-- Develop and deploy an interactive web application using Streamlit.
+- Understand factors associated with purchasing decisions.
+- Clean and preprocess the dataset.
+- Perform exploratory data analysis.
+- Generate meaningful data visualizations.
+- Train and compare traditional machine learning models.
+- Apply hyperparameter tuning and cross-validation.
+- Analyze overfitting and underfitting.
+- Develop an Artificial Neural Network using TensorFlow/Keras.
+- Experiment with ANN architectures and training configurations.
+- Evaluate models using classification metrics.
+- Save trained models.
+- Develop and deploy an interactive Streamlit application.
 
 ## 📊 Dataset
 
@@ -51,11 +72,9 @@ The dataset contains information about visitor browsing activities on an e-comme
 
 Each record represents an individual browsing session. The dataset includes numerical and categorical features describing page visits, browsing duration, visitor characteristics, and session information.
 
-The dataset was collected from the UCI Machine Learning Repository and organized using Python and Pandas.
+The dataset was obtained from the UCI Machine Learning Repository and processed using Python and Pandas.
 
 ### Input Features
-
-The dataset contains 17 input features.
 
 | No. | Feature | Description |
 |---|---|---|
@@ -88,7 +107,7 @@ It contains two possible values:
 - **True:** The browsing session resulted in a purchase.
 - **False:** The browsing session did not result in a purchase.
 
-The objective of the machine learning models is to predict the Revenue value from the 17 input features.
+The objective is to predict Revenue using the 17 input features.
 
 ### Label Generation Method
 
@@ -100,17 +119,17 @@ The project uses these existing labels for supervised machine learning. No artif
 
 ### Dataset Collection and Storage
 
-The original dataset was downloaded from the UCI Machine Learning Repository and stored as:
+Original dataset:
 
 `dataset/online_shoppers_intention.csv`
 
-After preprocessing and duplicate removal, the cleaned dataset was saved as:
+Cleaned dataset:
 
 `dataset/cleaned_online_shoppers.csv`
 
 ### Data Cleaning
 
-The following preprocessing steps were performed:
+The following steps were performed:
 
 1. Loaded the dataset using Pandas.
 2. Inspected the number of rows and columns.
@@ -122,59 +141,125 @@ The following preprocessing steps were performed:
 
 No missing values were found in the original dataset.
 
-After cleaning, the dataset contained 12,205 records.
+After cleaning, the dataset contained **12,205 records**.
 
 ## 🛠️ Technologies Used
+
+### Programming and Data Analysis
 
 - Python
 - Pandas
 - NumPy
 - Matplotlib
 - Seaborn
+
+### Machine Learning
+
 - Scikit-learn
+- Logistic Regression
+- K-Nearest Neighbors
+- Random Forest
+- RandomizedSearchCV
+- StandardScaler
+- OneHotEncoder
+
+### Deep Learning
+
+- TensorFlow 2.21.0
+- Keras
+- Artificial Neural Networks
+- ReLU and Sigmoid activations
+- Dropout
+- Early Stopping
+- Adam and RMSprop optimizers
+
+### Application and Development
+
 - Streamlit
 - Joblib
 - VS Code
 - Git and GitHub
+- Streamlit Community Cloud
 
 ## ⚙️ Project Workflow
 
-1. **Data Collection:** Downloaded the Online Shoppers Purchasing Intention Dataset from the UCI Machine Learning Repository.
-2. **Data Exploration:** Inspected the dataset, checked data types, and analyzed customer purchasing behaviour.
-3. **Data Cleaning:** Checked for missing values and removed 125 duplicate records.
+1. **Data Collection:** Obtained the Online Shoppers Purchasing Intention Dataset from UCI.
+2. **Data Exploration:** Inspected dataset structure, data types, and customer behaviour.
+3. **Data Cleaning:** Checked for missing values and removed duplicate records.
 4. **Feature Analysis:** Studied relationships between browsing activities and purchase outcomes.
-5. **Data Preparation:** Separated numerical and categorical features, applied preprocessing, and divided the dataset into training and testing sets.
-6. **Model Training:** Trained Logistic Regression, K-Nearest Neighbors (KNN), and Random Forest classification models.
-7. **Model Evaluation:** Compared models using accuracy, precision, recall, F1-score, and confusion matrices.
-8. **Hyperparameter Tuning:** Applied RandomizedSearchCV to optimize the Random Forest model.
-9. **Model Saving:** Saved the selected Random Forest pipeline using Joblib.
-10. **Web Application:** Developed an interactive prediction application using Streamlit.
-11. **Deployment:** Deployed the application using Streamlit Community Cloud.
+5. **Data Preparation:** Applied numerical scaling, categorical encoding, and stratified data splitting.
+6. **Traditional ML Training:** Trained Logistic Regression, KNN, and Random Forest.
+7. **Model Evaluation:** Compared accuracy, precision, recall, F1-score, and confusion matrices.
+8. **Hyperparameter Tuning:** Applied RandomizedSearchCV with 3-fold cross-validation.
+9. **Overfitting Analysis:** Compared training, testing, and cross-validation performance.
+10. **ANN Development:** Built an Artificial Neural Network using TensorFlow/Keras.
+11. **ANN Experiments:** Tested different layers, neurons, batch sizes, and optimizers.
+12. **ANN Evaluation:** Selected the best experimental architecture using validation F1-score and evaluated it on the held-out test set.
+13. **Model Saving:** Saved trained Random Forest and ANN models.
+14. **Web Application:** Developed an interactive prediction application using Streamlit.
+15. **Deployment:** Deployed the Random Forest prediction application using Streamlit Community Cloud.
 
 ## 🔍 Data Preprocessing
 
-The following preprocessing techniques were applied before model training.
-
 ### Numerical Features
+
+The following numerical features were used:
+
+- Administrative
+- Administrative_Duration
+- Informational
+- Informational_Duration
+- ProductRelated
+- ProductRelated_Duration
+- BounceRates
+- ExitRates
+- PageValues
+- SpecialDay
 
 Numerical features were scaled using StandardScaler where required.
 
 ### Categorical Features
 
-Categorical features were converted into numerical representations using OneHotEncoder.
+The following categorical features were used:
+
+- Month
+- OperatingSystems
+- Browser
+- Region
+- TrafficType
+- VisitorType
+- Weekend
+
+Categorical features were transformed using OneHotEncoder.
 
 ### Training and Testing Split
 
-The cleaned dataset was divided into:
+The cleaned dataset was divided using stratified sampling:
 
-- Training records: 9,764
-- Testing records: 2,441
-- Training percentage: 80%
-- Testing percentage: 20%
+| Dataset | Records | Percentage |
+|---|---:|---:|
+| Training | 9,764 | 80% |
+| Testing | 2,441 | 20% |
+| Total | 12,205 | 100% |
 
-Stratified sampling was used to maintain a similar distribution of purchase and non-purchase records across the training and testing sets.
+Stratified sampling maintained similar proportions of purchase and non-purchase sessions across the splits.
 
-Preprocessing was implemented using Scikit-learn pipelines to help prevent data leakage.
+Preprocessing was fitted on training data to reduce data leakage.
+
+### ANN Training, Validation, and Testing Split
+
+For the ANN experiments, the original training portion was divided again to create a validation set.
+
+| Dataset | Records |
+|---|---:|
+| ANN Training | 7,811 |
+| ANN Validation | 1,953 |
+| ANN Testing | 2,441 |
+| Total | 12,205 |
+
+The held-out test set was reserved for final evaluation.
+
+The ANN preprocessing generated **74 input features** after numerical scaling and categorical encoding.
 
 ## 📈 Exploratory Data Analysis
 
@@ -190,125 +275,126 @@ The analysis included:
 
 ### Important Observations
 
-**1. Class Imbalance**
-
-The dataset contains substantially more non-purchase sessions than purchase sessions.
+#### 1. Class Imbalance
 
 After cleaning:
 
-- No Purchase: 10,297 sessions
-- Purchase: 1,908 sessions
+- **No Purchase:** 10,297 sessions
+- **Purchase:** 1,908 sessions
 
-This imbalance makes precision, recall, and F1-score important evaluation metrics alongside accuracy.
+Non-purchase sessions significantly outnumber purchase sessions.
 
-**2. PageValues**
+This makes precision, recall, and F1-score important evaluation metrics alongside accuracy.
+
+#### 2. PageValues
 
 Sessions resulting in purchases generally had higher PageValues.
 
 Approximate average PageValues:
 
-- No Purchase: 2.00
-- Purchase: 27.26
+| Session Outcome | Average PageValues |
+|---|---:|
+| No Purchase | 2.00 |
+| Purchase | 27.26 |
 
-**3. Product-Related Duration**
+#### 3. Product-Related Duration
 
 Sessions resulting in purchases generally involved more time spent on product-related pages.
 
-Approximate average ProductRelated_Duration:
+| Session Outcome | Average Duration |
+|---|---:|
+| No Purchase | 1,082.98 seconds |
+| Purchase | 1,876.21 seconds |
 
-- No Purchase: 1,082.98 seconds
-- Purchase: 1,876.21 seconds
-
-**4. Visitor Type**
+#### 4. Visitor Type
 
 Purchase rates vary across visitor categories.
 
-Approximate purchase percentages:
+| Visitor Type | Purchase Percentage |
+|---|---:|
+| New Visitor | 24.93% |
+| Returning Visitor | 14.09% |
+| Other | 19.75% |
 
-- New Visitor: 24.93%
-- Returning Visitor: 14.09%
-- Other: 19.75%
+#### 5. Monthly Purchase Behaviour
 
-**5. Monthly Purchase Behaviour**
+Purchase rates vary across months.
 
-The purchase rate varies across months.
+- November: approximately 25.49%
+- February: approximately 1.66%
 
-November had an observed purchase rate of approximately 25.49%, while February had an observed purchase rate of approximately 1.66%.
-
-These observations describe associations in the dataset and do not establish that a feature directly causes a purchase.
+These findings describe associations in the dataset and do not establish that a particular feature directly causes a purchase.
 
 ### EDA Visualizations
 
-Five visualizations were generated using Matplotlib and Seaborn to understand customer browsing behaviour and purchasing patterns.
+Five visualizations were generated using Matplotlib and Seaborn.
 
 #### 1. Purchase Distribution
 
 ![Purchase Distribution](visualizations/purchase_distribution.png)
 
-This bar chart compares the number of purchase and non-purchase sessions.
-
-It highlights the class imbalance in the dataset, where non-purchase sessions significantly outnumber purchase sessions.
+This bar chart compares the number of purchase and non-purchase sessions and highlights the class imbalance.
 
 #### 2. Purchase Behavior by Visitor Type
 
 ![Visitor Purchase Behavior](visualizations/visitor_purchase_behavior.png)
 
-This chart compares purchase and non-purchase session counts across New Visitors, Returning Visitors, and Other Visitors.
-
-It helps identify differences in purchasing behaviour between visitor categories.
+This chart compares purchase and non-purchase session counts across visitor categories.
 
 #### 3. Product Browsing Duration
 
 ![Product Browsing Duration](visualizations/product_browsing_duration.png)
 
-This box plot compares the distribution of time spent on product-related pages between purchase and non-purchase sessions.
-
-It helps examine differences in browsing duration and identify unusually long sessions.
+This box plot compares time spent on product-related pages between purchase and non-purchase sessions.
 
 #### 4. Feature Correlation Heatmap
 
 ![Feature Correlation Heatmap](visualizations/feature_correlation_heatmap.png)
 
-This heatmap displays correlations between numerical dataset columns.
-
-It helps identify relationships among browsing activities, page durations, bounce rates, exit rates, and other numerical features.
+This heatmap displays correlations between numerical features and helps identify relationships among browsing activities.
 
 #### 5. Purchase Percentage by Visitor Type
 
 ![Visitor Purchase Percentage](visualizations/visitor_purchase_percentage.png)
 
-This chart compares purchase and non-purchase percentages within each visitor category.
+This chart compares purchase percentages within each visitor category.
 
-Unlike the visitor count chart, this visualization normalizes the results by visitor type, making it easier to compare purchase rates between categories.
+Unlike the visitor count chart, this visualization normalizes results by visitor type.
 
-## 🤖 Machine Learning Models
+## 🤖 Traditional Machine Learning Models
 
-Three traditional machine learning classification algorithms were trained and evaluated.
+Three traditional machine learning algorithms were trained and evaluated.
 
-| Model | Accuracy |
-|---|---:|
-| Logistic Regression | 88.69% |
-| K-Nearest Neighbors (KNN) | 87.34% |
-| Random Forest | **89.59%** |
+| Model | Test Accuracy | Purchase Precision | Purchase Recall | Purchase F1 |
+|---|---:|---:|---:|---:|
+| Logistic Regression | 88.69% | 0.75 | 0.41 | 0.53 |
+| K-Nearest Neighbors | 87.34% | 0.66 | 0.39 | 0.49 |
+| Random Forest | **89.59%** | 0.65 | **0.72** | **0.68** |
 
-### Best Performing Model: Random Forest
+### Selected Traditional ML Model: Random Forest
 
-The Random Forest model was selected based on its overall performance, particularly its ability to identify purchase sessions.
+Random Forest was selected because of its strong purchase-class recall and F1-score.
 
-Evaluation results:
+Baseline results:
 
 - Accuracy: 89.59%
-- Precision (Purchase): 65%
-- Recall (Purchase): 72%
-- F1-Score (Purchase): 68%
+- Purchase Precision: 65%
+- Purchase Recall: 72%
+- Purchase F1-score: 68%
 
-The model uses class weighting to help handle the imbalance between purchase and non-purchase sessions.
+Class weighting was used to help address class imbalance.
 
 ## 🔧 Hyperparameter Tuning
 
-RandomizedSearchCV was used to tune the Random Forest model.
+RandomizedSearchCV was used to tune the Random Forest classifier.
 
-The tuning process used 3-fold cross-validation and explored the following hyperparameters:
+The tuning process used:
+
+- 3-fold cross-validation.
+- F1-score as the optimization metric.
+- Eight sampled hyperparameter configurations.
+
+### Hyperparameters Explored
 
 - `n_estimators`
 - `max_depth`
@@ -318,36 +404,313 @@ The tuning process used 3-fold cross-validation and explored the following hyper
 ### Best Hyperparameters
 
 | Hyperparameter | Value |
-|---|---|
+|---|---:|
 | n_estimators | 300 |
 | max_depth | 30 |
 | min_samples_split | 2 |
 | min_samples_leaf | 1 |
 
+Best cross-validation F1-score:
+
+**0.6794**
+
 ### Baseline vs Tuned Random Forest
 
 | Metric | Baseline Random Forest | Tuned Random Forest |
 |---|---:|---:|
-| Accuracy | 89.59% | 89.43% |
-| Precision (Purchase) | 65% | 65% |
-| Recall (Purchase) | 72% | 71% |
-| F1-Score (Purchase) | 68% | 68% |
+| Accuracy | **89.59%** | 89.43% |
+| Purchase Precision | 65% | 65% |
+| Purchase Recall | **72%** | 71% |
+| Purchase F1-score | 68% | 68% |
 
 The tuned model did not improve the test-set results.
 
-Therefore, the original Random Forest model was retained as the selected model for deployment.
+Therefore, the original Random Forest model was retained for deployment.
 
-## 💾 Saved Machine Learning Model
+## 📉 Random Forest Overfitting Analysis
 
-The selected Random Forest model was saved using Joblib.
+The tuned Random Forest was evaluated using training, testing, and cross-validation metrics.
 
-Saved model path:
+### Training vs Testing Performance
+
+| Metric | Training | Testing |
+|---|---:|---:|
+| Accuracy | 0.9995 | 0.8943 |
+| Precision | 0.9967 | 0.6483 |
+| Recall | 1.0000 | 0.7094 |
+| F1-score | 0.9984 | 0.6775 |
+
+### Performance Gaps
+
+| Measurement | Value |
+|---|---:|
+| Training vs Testing Accuracy Gap | 0.1052 |
+| Training vs Testing F1 Gap | 0.3209 |
+| Mean CV Training F1 | 0.9977 |
+| Mean CV Validation F1 | 0.6794 |
+| Cross-Validation F1 Gap | 0.3183 |
+
+### Interpretation
+
+The tuned Random Forest achieved almost perfect training performance but substantially lower testing and cross-validation F1-scores.
+
+This indicates **significant overfitting**.
+
+Although hyperparameter tuning identified a strong cross-validation configuration, it did not improve the final test performance compared with the baseline Random Forest.
+
+### Overfitting Visualization
+
+![Random Forest Overfitting Analysis](visualizations/random_forest_overfitting_analysis.png)
+
+The chart compares training and testing performance and illustrates the generalization gap.
+
+## 🧠 Artificial Neural Network (ANN)
+
+An Artificial Neural Network was developed using TensorFlow and Keras to predict purchase outcomes.
+
+The ANN was trained on the same cleaned dataset as the traditional machine learning models.
+
+### ANN Architecture
+
+The initial ANN used:
+
+| Component | Configuration |
+|---|---|
+| Input Features | 74 |
+| First Hidden Layer | 64 neurons |
+| Second Hidden Layer | 32 neurons |
+| Hidden Activation | ReLU |
+| Output Layer | 1 neuron |
+| Output Activation | Sigmoid |
+| Dropout | 0.3 and 0.2 |
+| Optimizer | Adam |
+| Learning Rate | 0.001 |
+| Loss Function | Binary Cross-Entropy |
+| Batch Size | 32 |
+| Maximum Epochs | 50 |
+| Early Stopping Patience | 8 |
+| Trainable Parameters | 6,913 |
+
+### ANN Training
+
+The initial ANN was trained using:
+
+- 7,811 training records.
+- 1,953 validation records.
+- 2,441 held-out testing records.
+
+Early stopping monitored validation loss and restored the best model weights.
+
+Training stopped after **21 epochs**, with the best validation loss occurring at epoch 13.
+
+### Initial ANN Test Results
+
+| Metric | Result |
+|---|---:|
+| Accuracy | 89.80% |
+| Precision (Purchase) | 0.6997 |
+| Recall (Purchase) | 0.6099 |
+| F1-score (Purchase) | 0.6517 |
+
+### Initial ANN Confusion Matrix
+
+| Actual / Predicted | No Purchase | Purchase |
+|---|---:|---:|
+| No Purchase | 1,959 | 100 |
+| Purchase | 149 | 233 |
+
+### ANN Training Visualizations
+
+#### Training vs Validation Loss
+
+![ANN Training Loss](visualizations/ann_training_loss.png)
+
+Training loss decreased over time, while validation loss reached its minimum and later began increasing.
+
+This suggests some overfitting during later epochs. Early stopping helped limit further overfitting.
+
+#### Training vs Validation Accuracy
+
+![ANN Training Accuracy](visualizations/ann_training_accuracy.png)
+
+The graph compares training accuracy and validation accuracy across epochs.
+
+It helps assess learning progress and generalization performance.
+
+## 🧪 ANN Hyperparameter Experiments
+
+Four ANN configurations were tested to study the effect of network architecture and training settings.
+
+The experiments varied:
+
+- Number of hidden layers.
+- Number of neurons.
+- Batch size.
+- Optimizer.
+
+Each configuration used a maximum of 40 epochs with early stopping.
+
+The experimental models used ReLU hidden activations, sigmoid output activation, binary cross-entropy loss, and dropout of 0.2 after each hidden layer.
+
+### ANN Experiment Configurations
+
+| Model | Hidden Layers | Batch Size | Optimizer | Maximum Epochs |
+|---|---|---:|---|---:|
+| ANN 1 | 32 | 32 | Adam | 40 |
+| ANN 2 | 64 → 32 | 32 | Adam | 40 |
+| ANN 3 | 128 → 64 → 32 | 64 | Adam | 40 |
+| ANN 4 | 64 → 32 | 64 | RMSprop | 40 |
+
+### ANN Experiment Results
+
+These results were measured on the **validation set**, not the test set.
+
+| Model | Epochs Trained | Validation Accuracy | Precision | Recall | F1-score |
+|---|---:|---:|---:|---:|---:|
+| **ANN 1** | 28 | **0.8904** | **0.6730** | **0.5803** | **0.6232** |
+| ANN 2 | 15 | 0.8884 | 0.6719 | 0.5574 | 0.6093 |
+| ANN 3 | 13 | 0.8879 | 0.6641 | 0.5705 | 0.6138 |
+| ANN 4 | 17 | 0.8879 | 0.6720 | 0.5508 | 0.6054 |
+
+### Best ANN Experiment
+
+**ANN 1** achieved the highest validation F1-score.
+
+Its configuration was:
+
+- One hidden layer.
+- 32 neurons.
+- Adam optimizer.
+- Batch size of 32.
+- Maximum of 40 epochs.
+- Early stopping.
+- 28 epochs trained.
+
+Best validation F1-score:
+
+**0.6232**
+
+### ANN Experiment Comparison Visualization
+
+![ANN Experiment Comparison](visualizations/ann_experiment_comparison.png)
+
+This chart compares the validation F1-scores of the four experimental ANN configurations.
+
+### Experiment Findings
+
+The experiments showed that:
+
+1. The simpler 32-neuron ANN achieved the highest validation F1-score.
+2. Adding more layers and neurons did not improve validation F1-score.
+3. Adam performed better than RMSprop in the tested configurations.
+4. Early stopping reduced unnecessary training.
+5. Larger networks were not automatically better for this dataset.
+
+These conclusions apply to the configurations tested and do not establish that one optimizer or architecture is always superior.
+
+## 🏆 Final Best ANN Evaluation
+
+The best experimental ANN was evaluated on the held-out test set containing **2,441 records**.
+
+The test set was not used to select the experimental architecture.
+
+### Final Test Results
+
+| Metric | Result |
+|---|---:|
+| Accuracy | **89.80%** |
+| Precision (Purchase) | 0.6895 |
+| Recall (Purchase) | 0.6335 |
+| F1-score (Purchase) | **0.6603** |
+
+### Final Classification Results
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| No Purchase | 0.93 | 0.95 | 0.94 | 2,059 |
+| Purchase | 0.69 | 0.63 | 0.66 | 382 |
+
+### Final ANN Confusion Matrix
+
+| Actual / Predicted | No Purchase | Purchase |
+|---|---:|---:|
+| No Purchase | 1,950 | 109 |
+| Purchase | 140 | 242 |
+
+The best experimental ANN correctly identified 242 purchase sessions and 1,950 non-purchase sessions.
+
+It missed 140 actual purchases and incorrectly classified 109 non-purchase sessions as purchases.
+
+## 📊 Traditional ML vs Deep Learning Comparison
+
+The final comparison includes three traditional machine learning algorithms and the ANN models.
+
+| Model | Test Accuracy | Purchase F1-score |
+|---|---:|---:|
+| Logistic Regression | 88.69% | 0.53 |
+| K-Nearest Neighbors | 87.34% | 0.49 |
+| Random Forest (Baseline) | 89.59% | **0.68** |
+| Random Forest (Tuned) | 89.43% | **0.68** |
+| Initial ANN | **89.80%** | 0.6517 |
+| Best Experimental ANN | **89.80%** | 0.6603 |
+
+### Key Findings
+
+**Highest Test Accuracy:** ANN — 89.80%
+
+**Highest Purchase F1-score:** Random Forest — approximately 0.68
+
+**Highest Purchase Recall:** Baseline Random Forest — approximately 0.72
+
+**Best ANN Architecture Among Experiments:** One hidden layer with 32 neurons
+
+### Final Model Selection
+
+Although the ANN achieved slightly higher overall accuracy, Random Forest achieved better recall and F1-score for the purchase class.
+
+Because the dataset is imbalanced, accuracy alone is not sufficient to determine the most useful classifier.
+
+Therefore, the **baseline Random Forest remains the selected model for the Streamlit application**.
+
+The ANN demonstrates that deep learning can achieve competitive results on the same dataset.
+
+## 💾 Saved Models and Results
+
+### Random Forest Model
 
 `models/best_purchase_model.pkl`
 
-The saved object includes the preprocessing pipeline and trained classifier, allowing new input data to be transformed and classified consistently.
+The Random Forest model was saved using Joblib.
 
-The saved model was loaded and tested to verify that its predictions matched the original model.
+The saved object contains the preprocessing pipeline and trained classifier.
+
+The model was loaded and tested to verify consistent predictions.
+
+### Initial ANN Model
+
+`models/ann_purchase_model.keras`
+
+The initial ANN was saved using the native Keras model format.
+
+### Best Experimental ANN
+
+`models/ann_best_experiment.keras`
+
+The best experimental ANN was selected using validation F1-score.
+
+### ANN Experiment Results
+
+`models/ann_experiment_results.csv`
+
+This CSV file contains the experiment configurations and validation metrics.
+
+### ANN Preprocessing Note
+
+The ANN evaluation scripts reconstruct the same preprocessing steps and training split used during model training.
+
+For standalone ANN inference, the fitted preprocessing transformer should also be saved and reused alongside the Keras model.
+
+The deployed Streamlit application currently uses the saved Random Forest pipeline, which already includes its preprocessing.
 
 ## 🌐 Streamlit Web Application
 
@@ -365,11 +728,11 @@ The project includes an interactive web application where users can enter shoppi
 
 ### Application Screenshots
 
-**1. Application Home Page**
+#### 1. Application Home Page
 
 ![Application Home Page](screenshots/app-home.png)
 
-**2. Prediction Result**
+#### 2. Prediction Result
 
 ![Prediction Result](screenshots/prediction-result.png)
 
@@ -387,7 +750,10 @@ Ecommerce-Purchase-Prediction/
 │   └── cleaned_online_shoppers.csv
 │
 ├── models/
-│   └── best_purchase_model.pkl
+│   ├── best_purchase_model.pkl
+│   ├── ann_purchase_model.keras
+│   ├── ann_best_experiment.keras
+│   └── ann_experiment_results.csv
 │
 ├── screenshots/
 │   ├── app-home.png
@@ -398,7 +764,11 @@ Ecommerce-Purchase-Prediction/
 │   ├── visitor_purchase_behavior.png
 │   ├── product_browsing_duration.png
 │   ├── feature_correlation_heatmap.png
-│   └── visitor_purchase_percentage.png
+│   ├── visitor_purchase_percentage.png
+│   ├── random_forest_overfitting_analysis.png
+│   ├── ann_training_loss.png
+│   ├── ann_training_accuracy.png
+│   └── ann_experiment_comparison.png
 │
 ├── data_exploration.py
 ├── data_cleaning.py
@@ -412,6 +782,10 @@ Ecommerce-Purchase-Prediction/
 ├── save_best_model.py
 ├── test_saved_model.py
 ├── inspect_app_inputs.py
+│
+├── ann_model.py
+├── ann_experiments.py
+├── ann_final_evaluation.py
 │
 ├── app.py
 ├── requirements.txt
@@ -461,14 +835,78 @@ streamlit run app.py
 
 The application will open in your web browser.
 
+## 🧠 Running the ANN Locally
+
+TensorFlow training was performed separately using Python 3.12.
+
+This avoids changing the existing Streamlit application environment.
+
+### Step 1: Create an ANN Virtual Environment
+
+Make sure Python 3.12 is installed.
+
+```bash
+python3.12 -m venv .venv-ann
+```
+
+### Step 2: Activate the ANN Environment
+
+```bash
+source .venv-ann/bin/activate
+```
+
+### Step 3: Install ANN Dependencies
+
+```bash
+python -m pip install tensorflow==2.21.0 numpy pandas matplotlib scikit-learn
+```
+
+### Step 4: Train the Initial ANN
+
+```bash
+python ann_model.py
+```
+
+### Step 5: Run ANN Experiments
+
+```bash
+python ann_experiments.py
+```
+
+### Step 6: Evaluate the Best Experimental ANN
+
+```bash
+python ann_final_evaluation.py
+```
+
+The scripts generate trained ANN models, experiment results, and training visualizations.
+
+The ANN environment is excluded from Git using `.gitignore`.
+
 ## ⚠️ Limitations and Responsible Use
 
-- The model was trained on a specific historical e-commerce dataset and may not generalize to all online stores.
-- The dataset contains more non-purchase sessions than purchase sessions, which can affect model performance.
-- Predictions depend on the quality and relevance of the input features.
+- The models were trained on a specific historical e-commerce dataset and may not generalize to every online store.
+- The dataset contains substantially more non-purchase sessions than purchase sessions.
+- Some models may achieve high accuracy while missing actual purchase sessions.
+- The tuned Random Forest showed significant overfitting.
+- ANN performance depends on architecture, training configuration, and the selected decision threshold.
+- The ANN experiments covered four configurations rather than an exhaustive hyperparameter search.
+- The ANN uses a default classification threshold of 0.5.
 - The application does not automatically collect live website visitor data.
 - Purchase probabilities are model estimates and do not guarantee an actual purchase.
 - The project is intended for educational and demonstration purposes.
+
+## 🔮 Future Improvements
+
+Possible improvements include:
+
+- Experimenting with class weights and alternative loss functions for ANN training.
+- Tuning the classification threshold using validation data.
+- Evaluating additional neural network architectures.
+- Saving ANN preprocessing for standalone inference.
+- Adding probability calibration and further model diagnostics.
+- Testing performance on more recent e-commerce data.
+- Extending the Streamlit application to compare predictions from multiple models.
 
 ## 📚 References
 
@@ -477,6 +915,12 @@ Sakar, C. O., & Kastro, Y. (2018). Online Shoppers Purchasing Intention Dataset.
 Dataset License: CC BY 4.0.
 
 [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset)
+
+[TensorFlow Documentation](https://www.tensorflow.org/)
+
+[Scikit-learn Documentation](https://scikit-learn.org/stable/)
+
+[Streamlit Documentation](https://docs.streamlit.io/)
 
 ## 👨‍💻 Author
 
