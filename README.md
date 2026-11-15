@@ -1,10 +1,11 @@
+
 # E-Commerce Purchase Prediction System
 
 ## 🚀 Live Demo
 
 Try the deployed application here:
 
-[**Open E-Commerce Purchase Prediction App**](https://ecommerce-purchase-prediction-hh2lvreghmhfuqsnvafhm5.streamlit.app/)
+**[Open E-Commerce Purchase Prediction App](https://ecommerce-purchase-prediction-hh2lvreghmhfuqsnvafhm5.streamlit.app/)**
 
 ## 📌 Project Overview
 
@@ -34,15 +35,15 @@ A Random Forest Classification model is used to predict the purchase outcome. Th
 
 ### Dataset Details
 
-| Description               | Value                 |
-| ------------------------- | --------------------- |
-| Original records          | 12,330                |
-| Duplicate records removed | 125                   |
-| Cleaned records           | 12,205                |
-| Input features            | 17                    |
-| Target variable           | Revenue               |
-| File format               | CSV                   |
-| Project type              | Binary Classification |
+| Description | Value |
+|---|---|
+| Original records | 12,330 |
+| Duplicate records removed | 125 |
+| Cleaned records | 12,205 |
+| Input features | 17 |
+| Target variable | Revenue |
+| File format | CSV |
+| Project type | Binary Classification |
 
 ### Dataset Description
 
@@ -56,25 +57,25 @@ The dataset was collected from the UCI Machine Learning Repository and organized
 
 The dataset contains 17 input features.
 
-| No. | Feature                 | Description                                                          |
-| --- | ----------------------- | -------------------------------------------------------------------- |
-| 1   | Administrative          | Number of administrative pages visited during a session              |
-| 2   | Administrative_Duration | Time spent on administrative pages in seconds                        |
-| 3   | Informational           | Number of informational pages visited                                |
-| 4   | Informational_Duration  | Time spent on informational pages in seconds                         |
-| 5   | ProductRelated          | Number of product-related pages visited                              |
-| 6   | ProductRelated_Duration | Time spent on product-related pages in seconds                       |
-| 7   | BounceRates             | Average bounce-rate metric for pages visited during the session      |
-| 8   | ExitRates               | Average exit-rate metric for pages visited during the session        |
-| 9   | PageValues              | Average value of visited pages in relation to completed transactions |
-| 10  | SpecialDay              | Closeness of the session date to a special shopping day              |
-| 11  | Month                   | Month in which the browsing session occurred                         |
-| 12  | OperatingSystems        | Encoded category representing the visitor's operating system         |
-| 13  | Browser                 | Encoded category representing the visitor's browser                  |
-| 14  | Region                  | Encoded category representing the visitor's geographical region      |
-| 15  | TrafficType             | Encoded category representing the source or type of website traffic  |
-| 16  | VisitorType             | Visitor category: New Visitor, Returning Visitor, or Other           |
-| 17  | Weekend                 | Indicates whether the session occurred on a weekend                  |
+| No. | Feature | Description |
+|---|---|---|
+| 1 | Administrative | Number of administrative pages visited during a session |
+| 2 | Administrative_Duration | Time spent on administrative pages in seconds |
+| 3 | Informational | Number of informational pages visited |
+| 4 | Informational_Duration | Time spent on informational pages in seconds |
+| 5 | ProductRelated | Number of product-related pages visited |
+| 6 | ProductRelated_Duration | Time spent on product-related pages in seconds |
+| 7 | BounceRates | Average bounce-rate metric for pages visited during the session |
+| 8 | ExitRates | Average exit-rate metric for pages visited during the session |
+| 9 | PageValues | Average value of visited pages in relation to completed transactions |
+| 10 | SpecialDay | Closeness of the session date to a special shopping day |
+| 11 | Month | Month in which the browsing session occurred |
+| 12 | OperatingSystems | Encoded category representing the visitor's operating system |
+| 13 | Browser | Encoded category representing the visitor's browser |
+| 14 | Region | Encoded category representing the visitor's geographical region |
+| 15 | TrafficType | Encoded category representing the source or type of website traffic |
+| 16 | VisitorType | Visitor category: New Visitor, Returning Visitor, or Other |
+| 17 | Weekend | Indicates whether the session occurred on a weekend |
 
 The OperatingSystems, Browser, Region, and TrafficType features contain numerical category identifiers. These identifiers are treated as categorical variables rather than continuous numerical measurements.
 
@@ -139,25 +140,15 @@ After cleaning, the dataset contained 12,205 records.
 ## ⚙️ Project Workflow
 
 1. **Data Collection:** Downloaded the Online Shoppers Purchasing Intention Dataset from the UCI Machine Learning Repository.
-
 2. **Data Exploration:** Inspected the dataset, checked data types, and analyzed customer purchasing behaviour.
-
 3. **Data Cleaning:** Checked for missing values and removed 125 duplicate records.
-
 4. **Feature Analysis:** Studied relationships between browsing activities and purchase outcomes.
-
 5. **Data Preparation:** Separated numerical and categorical features, applied preprocessing, and divided the dataset into training and testing sets.
-
 6. **Model Training:** Trained Logistic Regression, K-Nearest Neighbors (KNN), and Random Forest classification models.
-
 7. **Model Evaluation:** Compared models using accuracy, precision, recall, F1-score, and confusion matrices.
-
 8. **Hyperparameter Tuning:** Applied RandomizedSearchCV to optimize the Random Forest model.
-
 9. **Model Saving:** Saved the selected Random Forest pipeline using Joblib.
-
 10. **Web Application:** Developed an interactive prediction application using Streamlit.
-
 11. **Deployment:** Deployed the application using Streamlit Community Cloud.
 
 ## 🔍 Data Preprocessing
@@ -228,17 +219,77 @@ Approximate average ProductRelated_Duration:
 - No Purchase: 1,082.98 seconds
 - Purchase: 1,876.21 seconds
 
+**4. Visitor Type**
+
+Purchase rates vary across visitor categories.
+
+Approximate purchase percentages:
+
+- New Visitor: 24.93%
+- Returning Visitor: 14.09%
+- Other: 19.75%
+
+**5. Monthly Purchase Behaviour**
+
+The purchase rate varies across months.
+
+November had an observed purchase rate of approximately 25.49%, while February had an observed purchase rate of approximately 1.66%.
+
 These observations describe associations in the dataset and do not establish that a feature directly causes a purchase.
+
+### EDA Visualizations
+
+Five visualizations were generated using Matplotlib and Seaborn to understand customer browsing behaviour and purchasing patterns.
+
+#### 1. Purchase Distribution
+
+![Purchase Distribution](visualizations/purchase_distribution.png)
+
+This bar chart compares the number of purchase and non-purchase sessions.
+
+It highlights the class imbalance in the dataset, where non-purchase sessions significantly outnumber purchase sessions.
+
+#### 2. Purchase Behavior by Visitor Type
+
+![Visitor Purchase Behavior](visualizations/visitor_purchase_behavior.png)
+
+This chart compares purchase and non-purchase session counts across New Visitors, Returning Visitors, and Other Visitors.
+
+It helps identify differences in purchasing behaviour between visitor categories.
+
+#### 3. Product Browsing Duration
+
+![Product Browsing Duration](visualizations/product_browsing_duration.png)
+
+This box plot compares the distribution of time spent on product-related pages between purchase and non-purchase sessions.
+
+It helps examine differences in browsing duration and identify unusually long sessions.
+
+#### 4. Feature Correlation Heatmap
+
+![Feature Correlation Heatmap](visualizations/feature_correlation_heatmap.png)
+
+This heatmap displays correlations between numerical dataset columns.
+
+It helps identify relationships among browsing activities, page durations, bounce rates, exit rates, and other numerical features.
+
+#### 5. Purchase Percentage by Visitor Type
+
+![Visitor Purchase Percentage](visualizations/visitor_purchase_percentage.png)
+
+This chart compares purchase and non-purchase percentages within each visitor category.
+
+Unlike the visitor count chart, this visualization normalizes the results by visitor type, making it easier to compare purchase rates between categories.
 
 ## 🤖 Machine Learning Models
 
 Three traditional machine learning classification algorithms were trained and evaluated.
 
-| Model                     |   Accuracy |
-| ------------------------- | ---------: |
-| Logistic Regression       |     88.69% |
-| K-Nearest Neighbors (KNN) |     87.34% |
-| Random Forest             | **89.59%** |
+| Model | Accuracy |
+|---|---:|
+| Logistic Regression | 88.69% |
+| K-Nearest Neighbors (KNN) | 87.34% |
+| Random Forest | **89.59%** |
 
 ### Best Performing Model: Random Forest
 
@@ -266,21 +317,21 @@ The tuning process used 3-fold cross-validation and explored the following hyper
 
 ### Best Hyperparameters
 
-| Hyperparameter    | Value |
-| ----------------- | ----- |
-| n_estimators      | 300   |
-| max_depth         | 30    |
-| min_samples_split | 2     |
-| min_samples_leaf  | 1     |
+| Hyperparameter | Value |
+|---|---|
+| n_estimators | 300 |
+| max_depth | 30 |
+| min_samples_split | 2 |
+| min_samples_leaf | 1 |
 
 ### Baseline vs Tuned Random Forest
 
-| Metric               | Baseline Random Forest | Tuned Random Forest |
-| -------------------- | ---------------------: | ------------------: |
-| Accuracy             |                 89.59% |              89.43% |
-| Precision (Purchase) |                    65% |                 65% |
-| Recall (Purchase)    |                    72% |                 71% |
-| F1-Score (Purchase)  |                    68% |                 68% |
+| Metric | Baseline Random Forest | Tuned Random Forest |
+|---|---:|---:|
+| Accuracy | 89.59% | 89.43% |
+| Precision (Purchase) | 65% | 65% |
+| Recall (Purchase) | 72% | 71% |
+| F1-Score (Purchase) | 68% | 68% |
 
 The tuned model did not improve the test-set results.
 
@@ -316,15 +367,15 @@ The project includes an interactive web application where users can enter shoppi
 
 **1. Application Home Page**
 
-
+![Application Home Page](screenshots/app-home.png)
 
 **2. Prediction Result**
 
-
+![Prediction Result](screenshots/prediction-result.png)
 
 ### Live Application
 
-[**Try the E-Commerce Purchase Prediction App**](https://ecommerce-purchase-prediction-hh2lvreghmhfuqsnvafhm5.streamlit.app/)
+**[Try the E-Commerce Purchase Prediction App](https://ecommerce-purchase-prediction-hh2lvreghmhfuqsnvafhm5.streamlit.app/)**
 
 ## 📁 Project Structure
 
@@ -341,6 +392,13 @@ Ecommerce-Purchase-Prediction/
 ├── screenshots/
 │   ├── app-home.png
 │   └── prediction-result.png
+│
+├── visualizations/
+│   ├── purchase_distribution.png
+│   ├── visitor_purchase_behavior.png
+│   ├── product_browsing_duration.png
+│   ├── feature_correlation_heatmap.png
+│   └── visitor_purchase_percentage.png
 │
 ├── data_exploration.py
 ├── data_cleaning.py
@@ -424,8 +482,8 @@ Dataset License: CC BY 4.0.
 
 **Farzin Mansoor**
 
-- GitHub: [https://github.com/farzinmansoor]
-- LinkedIn: [https://www.linkedin.com/in/farzin-mansoor-8045b3361/]
+- GitHub: https://github.com/farzinmansoor
+- LinkedIn: https://www.linkedin.com/in/farzin-mansoor-8045b3361/
 
 ---
 
